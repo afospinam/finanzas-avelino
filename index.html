@@ -1,0 +1,1574 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Laboratorio interactivo de educación financiera para estudiantes de 9.º a 11.º: dinero, presupuesto, ahorro, crédito, inversión y seguridad.">
+  <meta name="author" content="Andrés Felipe Ospina Molina">
+  <meta name="theme-color" content="#005f35">
+  <meta property="og:title" content="Finanzas para la vida · Laboratorio interactivo">
+  <meta property="og:description" content="Comprende, simula, decide y protege tus recursos mediante experiencias financieras interactivas.">
+  <meta property="og:type" content="website">
+  <title>Finanzas para la vida · Laboratorio interactivo</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23009c50'/%3E%3Cpath d='M34 10v44M45 20c-3-4-8-6-14-6-8 0-13 4-13 10 0 14 28 7 28 21 0 6-6 10-15 10-7 0-13-2-17-7' fill='none' stroke='%23fcef05' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --green: #009c50;
+      --green-dark: #005f35;
+      --green-light: #dff4e8;
+      --yellow: #fcef05;
+      --cyan: #3bc4e5;
+      --cyan-light: #e0f6fb;
+      --gray: #b1a7a5;
+      --white: #ffffff;
+      --wash: #f3f8f5;
+      --ink: #252a28;
+      --muted: #5c6862;
+      --line: #d6e3dc;
+      --shadow-sm: 0 10px 28px rgba(0, 95, 53, .08);
+      --shadow-md: 0 20px 60px rgba(0, 95, 53, .15);
+      --shadow-xl: 0 32px 90px rgba(0, 95, 53, .22);
+      --radius-sm: 14px;
+      --radius: 22px;
+      --radius-lg: 34px;
+      --content: 1240px;
+      --header-h: 76px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 24px); }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--wash);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.58;
+      overflow-x: hidden;
+    }
+    body.menu-open, body.modal-open { overflow: hidden; }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    img, iframe, svg { max-width: 100%; }
+    a { color: var(--green-dark); }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+    ::selection { color: var(--ink); background: var(--yellow); }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0,0,0,0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+    .skip-link {
+      position: fixed;
+      z-index: 1000;
+      left: 1rem;
+      top: -6rem;
+      padding: .8rem 1rem;
+      border-radius: 12px;
+      color: var(--white);
+      background: var(--green-dark);
+      text-decoration: none;
+      font-weight: 850;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    .container { width: min(var(--content), calc(100% - 2rem)); margin-inline: auto; }
+    .section { padding: clamp(4rem, 7vw, 7rem) 0; }
+    .section.white { background: var(--white); }
+    .section.soft { background: linear-gradient(180deg, var(--white), var(--wash)); }
+    .section.dark { color: var(--white); background: var(--green-dark); }
+    .section-heading { max-width: 820px; margin-bottom: 2rem; }
+    .section-heading.center { margin-inline: auto; text-align: center; }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      margin: 0 0 .75rem;
+      color: var(--green-dark);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .kicker::before { content: ""; width: 28px; height: 4px; border-radius: 99px; background: var(--yellow); }
+    .dark .kicker { color: var(--yellow); }
+    h1, h2, h3, h4 { margin-top: 0; text-wrap: balance; }
+    h2 { margin-bottom: .75rem; font-size: clamp(2rem, 4.4vw, 3.8rem); line-height: 1.04; letter-spacing: -.05em; }
+    h3 { line-height: 1.18; }
+    .section-heading > p:last-child { margin: 0; color: var(--muted); font-size: 1.06rem; }
+    .dark .section-heading > p:last-child { color: var(--green-light); }
+
+    .site-header {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      min-height: var(--header-h);
+      border-bottom: 3px solid var(--yellow);
+      background: rgba(255, 255, 255, .93);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 8px 30px rgba(0, 95, 53, .08);
+    }
+    .header-inner {
+      width: min(var(--content), calc(100% - 2rem));
+      min-height: var(--header-h);
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .brand { display: inline-flex; align-items: center; gap: .75rem; color: var(--ink); text-decoration: none; font-weight: 900; }
+    .brand-mark {
+      position: relative;
+      display: grid;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 14px;
+      color: var(--white);
+      background: var(--green);
+      box-shadow: inset 0 -5px 0 var(--yellow);
+      font-size: 1.35rem;
+    }
+    .brand small { display: block; color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .04em; }
+    .main-nav { display: flex; align-items: center; gap: .2rem; margin-left: auto; }
+    .main-nav a {
+      padding: .62rem .7rem;
+      border-radius: 11px;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 760;
+    }
+    .main-nav a:hover, .main-nav a[aria-current="location"] { color: var(--green-dark); background: var(--green-light); }
+    .menu-toggle {
+      display: none;
+      margin-left: auto;
+      min-height: 44px;
+      padding: .6rem .8rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--ink);
+      background: var(--white);
+      font-weight: 800;
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 86% 14%, rgba(59,196,229,.28) 0 130px, transparent 131px),
+        radial-gradient(circle at 96% 75%, rgba(252,239,5,.18) 0 260px, transparent 261px),
+        linear-gradient(135deg, var(--green-dark) 0%, var(--green) 78%);
+    }
+    .hero::before, .hero::after {
+      position: absolute;
+      z-index: -1;
+      content: "";
+      pointer-events: none;
+    }
+    .hero::before {
+      width: 260px;
+      height: 260px;
+      left: -90px;
+      bottom: -100px;
+      border: 34px solid rgba(59,196,229,.20);
+      border-radius: 50%;
+    }
+    .hero::after {
+      width: 160px;
+      height: 20px;
+      right: 38%;
+      top: 16%;
+      border-radius: 99px;
+      background: var(--yellow);
+      transform: rotate(-12deg);
+      opacity: .65;
+    }
+    .hero-inner {
+      width: min(var(--content), calc(100% - 2rem));
+      min-height: 650px;
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      align-items: center;
+      gap: clamp(2rem, 5vw, 5rem);
+      padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: 1rem;
+      padding: .42rem .75rem;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      color: var(--green-dark);
+      background: var(--yellow);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0; font-size: clamp(3rem, 7.4vw, 6.7rem); line-height: .9; letter-spacing: -.075em; }
+    .hero-copy { max-width: 720px; margin: 1.5rem 0 1.8rem; color: #ffffff; font-size: clamp(1.05rem, 2vw, 1.28rem); }
+    .hero-actions, .button-row { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .75rem 1.05rem;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      color: var(--white);
+      background: var(--green);
+      text-decoration: none;
+      font-weight: 850;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .button:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); background: var(--green-dark); }
+    .button.yellow { color: var(--ink); background: var(--yellow); }
+    .button.yellow:hover { background: var(--white); }
+    .button.ghost { border-color: rgba(255,255,255,.45); background: rgba(255,255,255,.07); }
+    .button.secondary { color: var(--green-dark); border-color: var(--line); background: var(--white); }
+    .button.small { min-height: 41px; padding: .55rem .8rem; font-size: .9rem; }
+    .button.icon-only { width: 46px; min-height: 46px; padding: 0; }
+
+    .hero-dashboard {
+      position: relative;
+      padding: 1.1rem;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 34px;
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-xl);
+    }
+    .dashboard-shell { padding: 1.15rem; border-radius: 26px; color: var(--ink); background: var(--white); }
+    .dashboard-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+    .dashboard-top strong { display: block; font-size: 1.05rem; }
+    .dashboard-top span { color: var(--muted); font-size: .82rem; }
+    .live-pill { display: inline-flex; align-items: center; gap: .35rem; padding: .32rem .55rem; border-radius: 999px; color: var(--green-dark) !important; background: var(--green-light); font-weight: 800; }
+    .live-pill::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 5px rgba(0,156,80,.12); }
+    .dashboard-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: .85rem; }
+    .dash-card { padding: 1rem; border: 1px solid var(--line); border-radius: 20px; background: var(--wash); }
+    .dash-card.dark-card { color: var(--white); border-color: transparent; background: var(--green-dark); }
+    .mini-ring {
+      --value: 64;
+      display: grid;
+      width: 128px;
+      aspect-ratio: 1;
+      margin: .5rem auto;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(var(--yellow) calc(var(--value) * 1%), rgba(255,255,255,.18) 0);
+    }
+    .mini-ring::before { content: ""; grid-area: 1 / 1; width: 88px; aspect-ratio: 1; border-radius: 50%; background: var(--green-dark); }
+    .mini-ring span { z-index: 1; grid-area: 1 / 1; text-align: center; font-size: 1.55rem; font-weight: 900; }
+    .mini-ring small { display: block; font-size: .68rem; font-weight: 700; }
+    .spark-bars { height: 140px; display: flex; align-items: flex-end; gap: .45rem; padding-top: 1rem; }
+    .spark-bars span { flex: 1; min-width: 10px; border-radius: 8px 8px 3px 3px; background: var(--cyan); animation: grow-bar .9s ease both; }
+    .spark-bars span:nth-child(2n) { background: var(--green); }
+    .spark-bars span:nth-child(3n) { background: var(--yellow); }
+    @keyframes grow-bar { from { height: 0 !important; } }
+    .dashboard-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-top: .85rem; }
+    .micro-stat { padding: .8rem; border-radius: 16px; background: var(--cyan-light); }
+    .micro-stat:nth-child(2) { background: var(--green-light); }
+    .micro-stat:nth-child(3) { background: #fffde0; }
+    .micro-stat strong { display: block; font-size: 1.18rem; }
+    .micro-stat span { color: var(--muted); font-size: .72rem; font-weight: 700; }
+
+    .quick-strip { position: relative; z-index: 5; margin-top: -42px; }
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .8rem;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--white);
+      box-shadow: var(--shadow-md);
+    }
+    .quick-item { display: flex; align-items: center; gap: .75rem; padding: .8rem; border-radius: 17px; }
+    .quick-item:hover { background: var(--wash); }
+    .quick-icon { display: grid; width: 42px; height: 42px; flex: 0 0 42px; place-items: center; border-radius: 13px; color: var(--green-dark); background: var(--green-light); font-weight: 900; }
+    .quick-item:nth-child(2) .quick-icon { background: var(--cyan-light); }
+    .quick-item:nth-child(3) .quick-icon { background: #fffde0; }
+    .quick-item:nth-child(4) .quick-icon { color: var(--white); background: var(--green-dark); }
+    .quick-item strong { display: block; }
+    .quick-item span { color: var(--muted); font-size: .78rem; }
+
+    .module-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
+    .module-card {
+      position: relative;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 1.35rem;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .module-card:hover, .module-card.active { transform: translateY(-4px); border-color: var(--green); box-shadow: var(--shadow-md); }
+    .module-card:nth-child(1), .module-card:nth-child(4) { grid-column: span 7; }
+    .module-card:nth-child(2), .module-card:nth-child(3), .module-card:nth-child(5), .module-card:nth-child(6) { grid-column: span 5; }
+    .module-card::after { position: absolute; width: 150px; height: 150px; right: -55px; bottom: -60px; content: ""; border-radius: 50%; background: var(--green-light); }
+    .module-card:nth-child(2)::after, .module-card:nth-child(5)::after { background: var(--cyan-light); }
+    .module-card:nth-child(3)::after, .module-card:nth-child(6)::after { background: #fffde0; }
+    .module-top { position: relative; z-index: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .module-icon { display: grid; width: 52px; height: 52px; place-items: center; border-radius: 17px; color: var(--white); background: var(--green); font-size: 1.3rem; font-weight: 900; }
+    .module-card:nth-child(2) .module-icon, .module-card:nth-child(5) .module-icon { color: var(--ink); background: var(--cyan); }
+    .module-card:nth-child(3) .module-icon, .module-card:nth-child(6) .module-icon { color: var(--ink); background: var(--yellow); }
+    .module-number { padding: .3rem .55rem; border-radius: 999px; color: var(--green-dark); background: var(--green-light); font-size: .72rem; font-weight: 850; }
+    .module-card h3 { position: relative; z-index: 1; margin: 1.1rem 0 .5rem; font-size: clamp(1.35rem, 2.2vw, 2rem); }
+    .module-card p { position: relative; z-index: 1; max-width: 680px; margin: 0 0 1rem; color: var(--muted); }
+    .module-card .button { position: relative; z-index: 1; align-self: flex-start; margin-top: auto; }
+    .module-progress { position: relative; z-index: 1; height: 7px; margin: .8rem 0 1rem; overflow: hidden; border-radius: 99px; background: var(--line); }
+    .module-progress span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--green); transition: width .4s ease; }
+
+    .studio {
+      margin-top: 2rem;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      background: var(--white);
+      box-shadow: var(--shadow-md);
+    }
+    .studio-header {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      color: var(--white);
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+    }
+    .studio-header::after { position: absolute; width: 220px; height: 220px; right: -70px; top: -80px; content: ""; border: 30px solid rgba(59,196,229,.25); border-radius: 50%; }
+    .studio-label { display: inline-flex; padding: .3rem .6rem; border-radius: 999px; color: var(--ink); background: var(--yellow); font-size: .74rem; font-weight: 900; }
+    .studio-header h3 { max-width: 820px; margin: .75rem 0 .5rem; font-size: clamp(2rem, 4.5vw, 4rem); line-height: 1; letter-spacing: -.05em; }
+    .studio-header p { max-width: 830px; margin: 0; color: var(--green-light); }
+    .studio-tabs { display: flex; gap: .35rem; padding: .8rem; overflow-x: auto; border-bottom: 1px solid var(--line); background: var(--wash); scrollbar-width: thin; }
+    .studio-tab {
+      min-width: max-content;
+      min-height: 44px;
+      padding: .55rem .85rem;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 800;
+    }
+    .studio-tab[aria-selected="true"] { color: var(--white); background: var(--green-dark); }
+    .studio-content { padding: clamp(1.2rem, 3vw, 2.4rem); }
+    .learn-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 1.2rem; }
+    .content-card { padding: 1.25rem; border: 1px solid var(--line); border-radius: 20px; background: var(--wash); }
+    .content-card.white-card { background: var(--white); }
+    .concept-list { display: flex; flex-wrap: wrap; gap: .45rem; padding: 0; list-style: none; }
+    .concept-list li { padding: .34rem .58rem; border-radius: 999px; color: var(--green-dark); background: var(--green-light); font-size: .82rem; font-weight: 780; }
+    .key-list { margin: .6rem 0 0; padding-left: 1.2rem; }
+    .key-list li { margin-bottom: .55rem; }
+    .formula-box { margin-top: 1rem; padding: 1rem; border-left: 5px solid var(--yellow); border-radius: 0 14px 14px 0; color: var(--white); background: var(--green-dark); font-family: Georgia, serif; font-size: 1.1rem; }
+    .example-box { padding: 1rem; border: 1px solid var(--line); border-radius: 17px; background: var(--cyan-light); }
+
+    .video-grid, .resource-grid, .workshop-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+    .video-card, .resource-card, .workshop-card {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      padding: 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+    .video-cover { min-height: 180px; display: grid; place-items: center; margin-bottom: 1rem; border-radius: 16px; background: linear-gradient(135deg, var(--green-dark), var(--green)); }
+    .play-button { display: grid; width: 64px; height: 64px; place-items: center; border: 0; border-radius: 50%; color: var(--ink); background: var(--yellow); box-shadow: var(--shadow-md); font-size: 1.35rem; }
+    .resource-tag { align-self: flex-start; padding: .3rem .55rem; border-radius: 999px; color: var(--green-dark); background: var(--green-light); font-size: .7rem; font-weight: 900; text-transform: uppercase; }
+    .resource-card h4, .video-card h4 { margin: .8rem 0 .35rem; font-size: 1.15rem; }
+    .resource-card p, .video-card p { margin: 0 0 1rem; color: var(--muted); }
+    .resource-card .button, .video-card .button { align-self: flex-start; margin-top: auto; }
+    .workshop-list { margin: 0; padding-left: 1.25rem; }
+    .workshop-list li { margin-bottom: .65rem; }
+
+    .quiz-progress { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: .9rem; margin-bottom: 1rem; }
+    .progress-track { height: 10px; overflow: hidden; border-radius: 99px; background: var(--line); }
+    .progress-track span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--green); transition: width .25s ease; }
+    .quiz-question { margin: 0 0 1rem; padding: 1.1rem; border: 1px solid var(--line); border-radius: 18px; background: var(--wash); }
+    .quiz-question legend { padding: 0 .3rem; font-weight: 850; }
+    .option { display: flex; align-items: flex-start; gap: .55rem; margin-top: .45rem; padding: .55rem; border-radius: 10px; cursor: pointer; }
+    .option:hover { background: var(--cyan-light); }
+    .option input { margin-top: .32rem; accent-color: var(--green); }
+    .feedback { min-height: 1.4rem; margin: .35rem 0 0; color: var(--green-dark); font-size: .9rem; font-weight: 750; }
+    .feedback.review { color: var(--ink); padding-left: .6rem; border-left: 4px solid var(--yellow); }
+    .quiz-result { margin-top: 1rem; padding: 1rem; border-radius: 14px; background: var(--green-light); font-weight: 850; }
+
+    .lab-shell {
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 32px;
+      background: var(--white);
+      box-shadow: var(--shadow-xl);
+    }
+    .lab-nav { display: flex; gap: .35rem; padding: .8rem; overflow-x: auto; background: var(--green-dark); }
+    .lab-tab {
+      min-width: max-content;
+      min-height: 46px;
+      padding: .6rem .9rem;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 13px;
+      color: var(--white);
+      background: rgba(255,255,255,.08);
+      font-weight: 800;
+    }
+    .lab-tab[aria-selected="true"] { color: var(--ink); border-color: var(--yellow); background: var(--yellow); }
+    .lab-panel { display: grid; grid-template-columns: .9fr 1.1fr; min-height: 590px; }
+    .lab-controls { padding: clamp(1.2rem, 3vw, 2.2rem); border-right: 1px solid var(--line); }
+    .lab-visual { min-width: 0; padding: clamp(1.2rem, 3vw, 2.2rem); background: var(--wash); }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .85rem; }
+    .field { min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { display: block; margin-bottom: .32rem; color: var(--ink); font-size: .86rem; font-weight: 780; }
+    .field input, .field select {
+      width: 100%;
+      min-height: 45px;
+      padding: .65rem .75rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--ink);
+      background: var(--white);
+    }
+    .field input:focus, .field select:focus { border-color: var(--green); }
+    .lab-actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-bottom: 1rem; }
+    .metric { padding: 1rem; border: 1px solid var(--line); border-radius: 17px; background: var(--white); }
+    .metric span { display: block; color: var(--muted); font-size: .72rem; font-weight: 760; text-transform: uppercase; letter-spacing: .05em; }
+    .metric strong { display: block; margin-top: .2rem; font-size: clamp(1.1rem, 2vw, 1.55rem); line-height: 1.05; overflow-wrap: anywhere; }
+    .chart-card { padding: 1rem; border: 1px solid var(--line); border-radius: 20px; background: var(--white); }
+    .chart-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .65rem; }
+    .chart-header h4 { margin-bottom: .2rem; }
+    .chart-header p { margin: 0; color: var(--muted); font-size: .83rem; }
+    .chart-svg { display: block; width: 100%; height: auto; min-height: 290px; }
+    .chart-legend { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .7rem; color: var(--muted); font-size: .8rem; }
+    .legend-item { display: inline-flex; align-items: center; gap: .35rem; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 3px; background: var(--green); }
+    .legend-dot.cyan { background: var(--cyan); }
+    .legend-dot.yellow { background: var(--yellow); }
+    .legend-dot.gray { background: var(--gray); }
+    .lab-note { margin-top: 1rem; padding: .9rem; border-left: 5px solid var(--yellow); border-radius: 0 13px 13px 0; color: var(--muted); background: var(--white); font-size: .88rem; }
+
+    .data-feature {
+      display: grid;
+      grid-template-columns: 1fr .9fr;
+      gap: 1.1rem;
+      align-items: stretch;
+      margin-bottom: 1.2rem;
+      padding: clamp(1.3rem, 4vw, 2.5rem);
+      overflow: hidden;
+      border-radius: 30px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      box-shadow: var(--shadow-md);
+    }
+    .data-feature h3 { margin-bottom: .6rem; font-size: clamp(1.7rem, 3.5vw, 3rem); }
+    .data-feature p { color: var(--green-light); }
+    .data-preview { display: flex; align-items: flex-end; gap: .65rem; min-height: 250px; padding: 1rem; border-radius: 22px; background: rgba(255,255,255,.1); }
+    .data-preview span { flex: 1; border-radius: 10px 10px 4px 4px; background: var(--cyan); }
+    .data-preview span:nth-child(2n) { background: var(--yellow); }
+    .data-preview span:nth-child(3n) { background: var(--white); }
+    .data-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
+    .data-card { padding: 1.2rem; border: 1px solid var(--line); border-radius: 22px; background: var(--white); box-shadow: var(--shadow-sm); }
+    .data-card strong { display: block; margin-bottom: .4rem; font-size: 1.1rem; }
+    .data-card p { margin: 0 0 1rem; color: var(--muted); }
+
+    .security-layout { display: grid; grid-template-columns: .7fr 1.3fr; gap: 1rem; align-items: start; }
+    .security-score { position: sticky; top: calc(var(--header-h) + 20px); padding: 1.3rem; border-radius: 24px; color: var(--white); background: var(--green-dark); }
+    .security-gauge {
+      --score: 0;
+      display: grid;
+      width: 190px;
+      aspect-ratio: 1;
+      margin: 1rem auto;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(var(--yellow) calc(var(--score) * 1%), rgba(255,255,255,.16) 0);
+    }
+    .security-gauge::before { content: ""; grid-area: 1/1; width: 142px; aspect-ratio: 1; border-radius: 50%; background: var(--green-dark); }
+    .security-gauge strong { z-index: 1; grid-area: 1/1; font-size: 2.4rem; }
+    .scenario-list { display: grid; gap: .85rem; }
+    .scenario { padding: 1.1rem; border: 1px solid var(--line); border-radius: 20px; background: var(--white); }
+    .scenario h4 { margin-bottom: .35rem; }
+    .scenario p { margin-top: 0; color: var(--muted); }
+    .scenario-options { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .scenario-option { min-height: 40px; padding: .5rem .7rem; border: 1px solid var(--line); border-radius: 11px; color: var(--ink); background: var(--wash); font-weight: 750; }
+    .scenario-option.selected { color: var(--white); border-color: var(--green-dark); background: var(--green-dark); }
+    .scenario-feedback { min-height: 1.45rem; margin-top: .55rem; font-size: .88rem; font-weight: 720; }
+    .scenario-feedback.review { padding-left: .6rem; border-left: 4px solid var(--yellow); }
+
+    .resource-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; }
+    .filter-row { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .filter-button { min-height: 41px; padding: .5rem .75rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--white); font-weight: 760; }
+    .filter-button.active { color: var(--white); border-color: var(--green-dark); background: var(--green-dark); }
+    .search-box { min-width: min(100%, 310px); min-height: 44px; padding: .6rem .75rem; border: 1px solid var(--line); border-radius: 13px; background: var(--white); }
+    .resource-explorer-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
+    .explorer-card { display: flex; min-width: 0; flex-direction: column; padding: 1.15rem; border: 1px solid var(--line); border-radius: 21px; background: var(--white); box-shadow: var(--shadow-sm); }
+    .explorer-card h3 { margin: .7rem 0 .35rem; font-size: 1.1rem; }
+    .explorer-card p { margin: 0 0 1rem; color: var(--muted); font-size: .9rem; }
+    .explorer-card .button { align-self: flex-start; margin-top: auto; }
+    .resource-meta { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .chip { padding: .28rem .5rem; border-radius: 999px; color: var(--green-dark); background: var(--green-light); font-size: .67rem; font-weight: 850; }
+    .chip.cyan { color: var(--ink); background: var(--cyan-light); }
+    .chip.yellow { color: var(--ink); background: #fffde0; }
+    .empty-state { grid-column: 1 / -1; padding: 2rem; border: 1px dashed var(--gray); border-radius: 20px; text-align: center; color: var(--muted); background: var(--white); }
+
+    .experience-card { display: grid; grid-template-columns: 1fr .85fr; gap: 1.2rem; padding: clamp(1.4rem, 4vw, 2.6rem); border: 1px solid var(--line); border-radius: 30px; background: var(--white); box-shadow: var(--shadow-md); }
+    .experience-visual { position: relative; min-height: 310px; display: grid; place-items: center; overflow: hidden; border-radius: 24px; color: var(--white); background: linear-gradient(135deg, var(--green-dark), var(--green)); }
+    .experience-visual::before, .experience-visual::after { position: absolute; content: ""; border-radius: 50%; }
+    .experience-visual::before { width: 240px; height: 240px; border: 32px solid rgba(59,196,229,.25); }
+    .experience-visual::after { width: 95px; height: 95px; right: 12%; bottom: 12%; background: var(--yellow); }
+    .experience-symbol { position: relative; z-index: 1; font-size: 7rem; font-weight: 900; }
+    .experience-card ul { padding-left: 1.2rem; }
+
+    .privacy-banner { display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start; padding: 1.2rem; border: 1px solid var(--line); border-radius: 20px; background: var(--cyan-light); }
+    .privacy-icon { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 15px; color: var(--white); background: var(--green-dark); font-size: 1.2rem; }
+    .privacy-banner h3 { margin-bottom: .3rem; }
+    .privacy-banner p { margin: 0; color: var(--muted); }
+
+    footer { padding: 3rem 1rem; border-top: 5px solid var(--yellow); color: var(--green-light); background: var(--ink); }
+    .footer-grid { width: min(var(--content), 100%); margin-inline: auto; display: grid; grid-template-columns: 1.2fr .8fr; gap: 2rem; }
+    footer h2 { color: var(--white); font-size: 1.8rem; letter-spacing: -.03em; }
+    footer a { color: var(--white); }
+    .footer-links { display: grid; grid-template-columns: repeat(2, 1fr); gap: .4rem 1rem; align-content: start; }
+
+    .back-top {
+      position: fixed;
+      z-index: 70;
+      right: 1rem;
+      bottom: 1rem;
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--green);
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .back-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .toast {
+      position: fixed;
+      z-index: 300;
+      left: 50%;
+      bottom: 1rem;
+      max-width: min(430px, calc(100% - 2rem));
+      padding: .85rem 1rem;
+      border-radius: 14px;
+      color: var(--white);
+      background: var(--green-dark);
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transform: translate(-50%, 14px);
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .modal {
+      position: fixed;
+      z-index: 400;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+      background: rgba(37,42,40,.72);
+    }
+    .modal-dialog { width: min(920px, 100%); max-height: calc(100vh - 2rem); overflow: auto; border-radius: 24px; background: var(--white); box-shadow: var(--shadow-xl); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.2rem; border-bottom: 1px solid var(--line); }
+    .modal-header h2 { margin: 0; font-size: 1.25rem; letter-spacing: -.02em; }
+    .modal-close { width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 12px; background: var(--wash); font-size: 1.1rem; }
+    .modal-body { padding: 1.1rem; }
+    .video-frame { position: relative; padding-top: 56.25%; overflow: hidden; border-radius: 18px; background: var(--ink); }
+    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 1050px) {
+      .hero-inner, .learn-grid, .data-feature, .experience-card { grid-template-columns: 1fr; }
+      .hero-dashboard { max-width: 720px; }
+      .quick-grid { grid-template-columns: repeat(2, 1fr); }
+      .module-card:nth-child(n) { grid-column: span 6; }
+      .lab-panel { grid-template-columns: 1fr; }
+      .lab-controls { border-right: 0; border-bottom: 1px solid var(--line); }
+      .data-grid, .resource-explorer-grid { grid-template-columns: repeat(2, 1fr); }
+      .security-layout { grid-template-columns: 1fr; }
+      .security-score { position: static; }
+    }
+    @media (max-width: 860px) {
+      .menu-toggle { display: inline-flex; align-items: center; }
+      .main-nav {
+        position: fixed;
+        inset: var(--header-h) 0 auto;
+        display: grid;
+        gap: .35rem;
+        padding: 1rem;
+        border-bottom: 3px solid var(--yellow);
+        background: var(--white);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-120%);
+        visibility: hidden;
+        transition: transform .2s ease, visibility .2s ease;
+      }
+      .main-nav.open { transform: translateY(0); visibility: visible; }
+      .main-nav a { padding: .8rem; }
+      .brand small { display: none; }
+      .hero-inner { min-height: auto; }
+      .module-card:nth-child(n) { grid-column: span 12; }
+      .video-grid, .resource-grid, .workshop-grid { grid-template-columns: 1fr; }
+      .metric-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      :root { --header-h: 70px; }
+      .container, .header-inner, .hero-inner { width: min(100% - 1.15rem, var(--content)); }
+      .section { padding: 3.6rem 0; }
+      .hero-inner { padding: 3.8rem 0 5rem; }
+      .hero::after { display: none; }
+      .hero-dashboard { padding: .65rem; border-radius: 25px; }
+      .dashboard-shell { padding: .8rem; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .spark-bars { height: 105px; }
+      .dashboard-bottom { grid-template-columns: 1fr; }
+      .quick-strip { margin-top: -28px; }
+      .quick-grid, .data-grid, .resource-explorer-grid { grid-template-columns: 1fr; }
+      .quick-grid { padding: .65rem; }
+      .studio { border-radius: 24px; }
+      .studio-content { padding: 1rem; }
+      .form-grid, .metric-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .chart-svg { min-height: 230px; }
+      .data-feature { padding: 1.1rem; }
+      .data-preview { min-height: 180px; }
+      .experience-visual { min-height: 230px; }
+      .experience-symbol { font-size: 5rem; }
+      .privacy-banner { grid-template-columns: 1fr; }
+      .footer-links { grid-template-columns: 1fr; }
+      .button { width: 100%; }
+      .button-row .button, .lab-actions .button, .resource-card .button, .explorer-card .button { width: auto; flex: 1 1 150px; }
+    }
+    @media print {
+      .site-header, .hero-actions, .quick-strip, .module-grid, .studio-tabs, .lab-nav, .lab-actions, .resource-toolbar,
+      .button, .back-top, .toast, .modal, footer { display: none !important; }
+      body { background: var(--white); color: #000; }
+      .hero { color: #000; background: var(--white); }
+      .hero-inner { min-height: auto; padding: 1rem 0; grid-template-columns: 1fr; }
+      .hero-dashboard { display: none; }
+      .section { padding: 1.2rem 0; }
+      .studio, .lab-shell, .resource-card, .data-card { box-shadow: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="Finanzas para la vida, ir al inicio">
+        <span class="brand-mark" aria-hidden="true">$</span>
+        <span>Finanzas para la vida<small>Laboratorio educativo</small></span>
+      </a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">☰ Menú</button>
+      <nav class="main-nav" id="main-nav" aria-label="Navegación principal">
+        <a href="#ruta">Ruta</a>
+        <a href="#aula">Aula</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <a href="#datos-reales">Datos reales</a>
+        <a href="#seguridad">Seguridad</a>
+        <a href="#biblioteca">Biblioteca</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <div class="hero-inner">
+      <div>
+        <span class="hero-badge">Grados 9.º a 11.º · Educación financiera</span>
+        <h1 id="hero-title">Tu dinero.<br>Mejores decisiones.</h1>
+        <p class="hero-copy">Una experiencia interactiva para comprender el dinero, simular escenarios, comparar alternativas y proteger tus recursos sin registrar información personal.</p>
+        <div class="hero-actions">
+          <a class="button yellow" href="#ruta">Iniciar recorrido ↓</a>
+          <a class="button ghost" href="#laboratorio">Abrir laboratorio</a>
+        </div>
+      </div>
+      <aside class="hero-dashboard" aria-label="Vista previa del laboratorio financiero">
+        <div class="dashboard-shell">
+          <div class="dashboard-top">
+            <div><strong>Panel financiero</strong><span>Simulación educativa local</span></div>
+            <span class="live-pill">Interactivo</span>
+          </div>
+          <div class="dashboard-grid">
+            <div class="dash-card dark-card">
+              <span>Capacidad de ahorro</span>
+              <div class="mini-ring" style="--value:64"><span>64%<small>meta mensual</small></span></div>
+            </div>
+            <div class="dash-card">
+              <strong>Proyección</strong>
+              <div class="spark-bars" aria-hidden="true">
+                <span style="height:35%"></span><span style="height:47%"></span><span style="height:43%"></span><span style="height:60%"></span><span style="height:72%"></span><span style="height:83%"></span><span style="height:96%"></span>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-bottom">
+            <div class="micro-stat"><strong>6</strong><span>Módulos</span></div>
+            <div class="micro-stat"><strong>5</strong><span>Simuladores</span></div>
+            <div class="micro-stat"><strong>0</strong><span>Datos enviados</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <main id="contenido">
+    <div class="quick-strip container" aria-label="Características principales">
+      <div class="quick-grid">
+        <div class="quick-item"><span class="quick-icon" aria-hidden="true">◎</span><div><strong>Aprende</strong><span>Conceptos breves y aplicados</span></div></div>
+        <div class="quick-item"><span class="quick-icon" aria-hidden="true">⌁</span><div><strong>Simula</strong><span>Gráficas generadas al instante</span></div></div>
+        <div class="quick-item"><span class="quick-icon" aria-hidden="true">✓</span><div><strong>Comprueba</strong><span>Retroalimentación inmediata</span></div></div>
+        <div class="quick-item"><span class="quick-icon" aria-hidden="true">◈</span><div><strong>Protégete</strong><span>Sin registro ni almacenamiento</span></div></div>
+      </div>
+    </div>
+
+    <section class="section" id="ruta">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="kicker">Ruta de aprendizaje</p>
+          <h2>Seis decisiones que atraviesan la vida financiera</h2>
+          <p>Selecciona un módulo. El aula interactiva se actualizará sin recargar la página y conservará tu avance únicamente durante esta visita.</p>
+        </div>
+        <div class="module-grid" id="module-grid" aria-label="Módulos de aprendizaje"></div>
+      </div>
+    </section>
+
+    <section class="section white" id="aula">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="kicker">Aula interactiva</p>
+          <h2>Un módulo activo, cuatro formas de aprender</h2>
+          <p>Consulta la explicación, abre recursos oficiales, descarga un taller y comprueba lo aprendido.</p>
+        </div>
+        <article class="studio reveal" id="module-studio" aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section class="section dark" id="laboratorio">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="kicker">Laboratorio financiero</p>
+          <h2>Los números cuentan una historia cuando puedes verlos</h2>
+          <p>Modifica los datos y observa cómo cambian el balance, la meta, la deuda, el crecimiento y el poder adquisitivo.</p>
+        </div>
+        <div class="lab-shell reveal">
+          <div class="lab-nav" role="tablist" aria-label="Simuladores financieros">
+            <button class="lab-tab" type="button" role="tab" aria-selected="true" data-lab="budget">Presupuesto</button>
+            <button class="lab-tab" type="button" role="tab" aria-selected="false" data-lab="saving">Ahorro</button>
+            <button class="lab-tab" type="button" role="tab" aria-selected="false" data-lab="credit">Crédito</button>
+            <button class="lab-tab" type="button" role="tab" aria-selected="false" data-lab="investment">Inversión</button>
+            <button class="lab-tab" type="button" role="tab" aria-selected="false" data-lab="inflation">Inflación</button>
+          </div>
+          <div id="lab-content"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft" id="datos-reales">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="kicker">Observatorio oficial</p>
+          <h2>De la simulación escolar a los datos reales de Colombia</h2>
+          <p>Los simuladores anteriores usan datos que tú proporcionas. Estas herramientas externas permiten contrastarlos con información oficial y actualizada.</p>
+        </div>
+        <article class="data-feature reveal">
+          <div>
+            <span class="hero-badge">Recurso destacado · Superfinanciera</span>
+            <h3>Tasas y desembolsos por modalidad de crédito</h3>
+            <p>Explora el tablero Power BI de la Superintendencia Financiera para comparar modalidades, tasas y desembolsos reportados por el sistema financiero.</p>
+            <div class="button-row">
+              <a class="button yellow" href="https://www.superfinanciera.gov.co/powerbi/reportes/536/483/" target="_blank" rel="noopener noreferrer">Abrir tablero oficial ↗</a>
+              <button class="button ghost" type="button" data-open-lab="credit">Simular un crédito</button>
+            </div>
+            <p><small>Se abre en una pestaña nueva. El tablero pertenece a la Superintendencia Financiera de Colombia.</small></p>
+          </div>
+          <div class="data-preview" aria-hidden="true">
+            <span style="height:42%"></span><span style="height:61%"></span><span style="height:49%"></span><span style="height:76%"></span><span style="height:68%"></span><span style="height:92%"></span><span style="height:81%"></span>
+          </div>
+        </article>
+        <div class="data-grid reveal">
+          <article class="data-card"><strong>Visor IPC</strong><p>Analiza la variación de precios por ciudad, división de gasto y periodo.</p><a class="button secondary small" href="https://sitios.dane.gov.co/ipc/visorIPC/" target="_blank" rel="noopener noreferrer">Abrir DANE ↗</a></article>
+          <article class="data-card"><strong>Graficador económico</strong><p>Construye series y compara variables económicas publicadas por el Banco de la República.</p><a class="button secondary small" href="https://suameca.banrep.gov.co/graficador-interactivo/" target="_blank" rel="noopener noreferrer">Abrir Banrep ↗</a></article>
+          <article class="data-card"><strong>Tasas para ahorro y CDT</strong><p>Consulta tasas efectivas anuales transmitidas por establecimientos vigilados.</p><a class="button secondary small" href="https://www.superfinanciera.gov.co/Superfinanciera-Tasas/faces/generic/passiveInterestRates.xhtml" target="_blank" rel="noopener noreferrer">Consultar tasas ↗</a></article>
+          <article class="data-card"><strong>Comparador de tarifas</strong><p>Contrasta costos de productos y servicios ofrecidos por entidades financieras.</p><a class="button secondary small" href="https://www.superfinanciera.gov.co/ComparadorTarifas/home" target="_blank" rel="noopener noreferrer">Comparar ↗</a></article>
+          <article class="data-card"><strong>Conversor de tasas</strong><p>Convierte una tasa efectiva anual en mensual o diaria para comparar correctamente.</p><a class="button secondary small" href="https://www.superfinanciera.gov.co/InformacionMercadoValores/reporteConversionTasas/index.xhtml" target="_blank" rel="noopener noreferrer">Convertir ↗</a></article>
+          <article class="data-card"><strong>Educación al inversionista</strong><p>Consulta videos y cartillas sobre bonos, acciones, fondos y derechos del inversionista.</p><a class="button secondary small" href="https://amvcolombia.org.co/educacion-financiera-2/" target="_blank" rel="noopener noreferrer">Abrir AMV ↗</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section white" id="seguridad">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="kicker">Misión antifraude</p>
+          <h2>No basta con saber calcular: también hay que saber detenerse</h2>
+          <p>Evalúa situaciones frecuentes. El indicador se actualiza a medida que identificas señales de riesgo.</p>
+        </div>
+        <div class="security-layout reveal">
+          <aside class="security-score">
+            <span class="studio-label">Puntaje de protección</span>
+            <div class="security-gauge" id="security-gauge" style="--score:0"><strong id="security-score">0%</strong></div>
+            <p id="security-message">Analiza los cuatro casos. No compartas códigos, claves ni datos bancarios.</p>
+            <button class="button yellow" id="reset-security" type="button">Reiniciar misión</button>
+          </aside>
+          <div class="scenario-list" id="scenario-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="biblioteca">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="kicker">Biblioteca curada</p>
+          <h2>Recursos confiables, organizados para no perderse</h2>
+          <p>Filtra por tema o busca una palabra. Todos los enlaces externos se identifican y se abren en una pestaña nueva.</p>
+        </div>
+        <div class="resource-toolbar reveal">
+          <div class="filter-row" id="resource-filters" aria-label="Filtros de recursos"></div>
+          <label><span class="sr-only">Buscar recursos</span><input class="search-box" id="resource-search" type="search" placeholder="Buscar recurso o entidad…"></label>
+        </div>
+        <div class="resource-explorer-grid reveal" id="resource-explorer"></div>
+      </div>
+    </section>
+
+    <section class="section white" id="experiencia">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="kicker">Experiencia fuera de pantalla</p>
+          <h2>Una salida pedagógica que conecta economía y territorio</h2>
+        </div>
+        <article class="experience-card reveal">
+          <div>
+            <span class="studio-label">Banco de la República · Medellín</span>
+            <h3>Exhibición Monetaria Interactiva — EMI</h3>
+            <p>La EMI está diseñada para estudiantes de los últimos grados de secundaria. Combina una charla sobre el Banco de la República, reconocimiento de billetes y una sala con juegos interactivos sobre inflación, instrumentos de pago, tasa de interés y política monetaria.</p>
+            <ul>
+              <li>Visita gratuita con reserva institucional.</li>
+              <li>Duración aproximada de tres horas.</li>
+              <li>Grupos de 20 a 40 personas, incluidos los acompañantes.</li>
+              <li>Actividad especialmente pertinente para 10.º y 11.º.</li>
+            </ul>
+            <a class="button" href="https://www.banrep.gov.co/es/educa/emi-medellin-planea-su-visita" target="_blank" rel="noopener noreferrer">Planear visita a la EMI ↗</a>
+          </div>
+          <div class="experience-visual" aria-label="Representación gráfica de una moneda dentro de una exhibición interactiva"><span class="experience-symbol" aria-hidden="true">$</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section soft" id="privacidad">
+      <div class="container">
+        <div class="privacy-banner reveal">
+          <span class="privacy-icon" aria-hidden="true">◈</span>
+          <div><h3>Privacidad por diseño</h3><p>Los cuestionarios, retos y simuladores funcionan únicamente en el navegador. No solicitan nombres, documentos, correos, números de cuenta ni claves; tampoco almacenan o envían la información ingresada.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div><h2>Finanzas para la vida</h2><p>Recurso educativo de apoyo para estudiantes de 9.º a 11.º de la Institución Educativa Avelino Saldarriaga.</p><p>Las simulaciones son aproximaciones pedagógicas y no constituyen asesoría financiera ni recomendaciones de inversión.</p></div>
+      <div class="footer-links">
+        <a href="#ruta">Ruta</a><a href="#laboratorio">Laboratorio</a><a href="#datos-reales">Datos oficiales</a><a href="#seguridad">Seguridad</a><a href="#biblioteca">Biblioteca</a><a href="#inicio">Volver al inicio ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-top" id="back-top" type="button" aria-label="Volver al inicio">↑</button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal" id="video-modal" role="dialog" aria-modal="true" aria-labelledby="video-modal-title" hidden>
+    <div class="modal-dialog">
+      <div class="modal-header"><h2 id="video-modal-title">Video educativo</h2><button class="modal-close" id="modal-close" type="button" aria-label="Cerrar video">×</button></div>
+      <div class="modal-body" id="video-modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+
+    const modules = [
+      {
+        id: "dinero",
+        theme: "money",
+        number: "Módulo 1",
+        icon: "◎",
+        title: "Dinero y decisiones cotidianas",
+        lead: "Comprende para qué sirve el dinero, de dónde provienen los ingresos y cómo la inflación modifica su capacidad de compra.",
+        concepts: ["dinero", "ingresos", "gastos", "necesidades", "deseos", "inflación", "poder adquisitivo"],
+        example: "Una merienda que costaba $8.000 aumenta a $8.800. Aunque conserves el mismo dinero, ahora puedes comprar menos: tu poder adquisitivo disminuyó.",
+        keyPoints: [
+          "El dinero sirve como medio de intercambio, unidad de cuenta y reserva de valor.",
+          "Un ingreso es un recurso recibido; un gasto es el uso de ese recurso.",
+          "Necesidad y deseo no significan lo mismo, pero ambos deben evaluarse dentro del presupuesto.",
+          "La inflación es el aumento generalizado y sostenido de los precios; no es solo el incremento aislado de un producto.",
+          "Registrar pequeños gastos permite reconocer patrones que suelen pasar inadvertidos."
+        ],
+        formula: "Balance básico = ingresos − gastos",
+        video: { id: "ZF1xwXMigME", title: "¿Qué es el dinero y para qué sirve?", source: "Banco de la República" },
+        secondVideo: { id: "gkDQGribCfc", title: "¿Qué es la inflación?", source: "Banco de la República" },
+        resources: [
+          { title: "Índice de Precios al Consumidor", source: "DANE", description: "Consulta qué mide el IPC y explora datos oficiales.", url: "https://www.dane.gov.co/index.php/estadisticas-por-tema-2/precios-y-costos/indice-de-precios-al-consumidor-ipc", icon: "IPC" },
+          { title: "Graficador interactivo", source: "Banco de la República", description: "Explora series económicas y cambios a través del tiempo.", url: "https://suameca.banrep.gov.co/graficador-interactivo/", icon: "↗" }
+        ],
+        workshop: [
+          "Registra cinco gastos realizados durante una semana y clasifícalos como necesidad, deseo o imprevisto.",
+          "Explica con un ejemplo la diferencia entre ingreso fijo, ingreso variable y regalo.",
+          "Un producto pasa de $50.000 a $54.000. Calcula el aumento porcentual y explica qué significa.",
+          "Compara dos formas de pago para una misma compra: efectivo y pago digital. Identifica ventajas, riesgos y condiciones.",
+          "Diseña una recomendación para una persona que gasta pequeñas cantidades sin registrarlas."
+        ],
+        quiz: [
+          { q: "¿Cuál situación representa mejor una necesidad?", options: ["Comprar otro accesorio por moda", "Pagar el transporte para asistir a clase", "Cambiar un celular que funciona", "Comprar comida solo por una promoción"], answer: 1, feedback: "El transporte para asistir a clase responde a una necesidad funcional. Los demás casos requieren evaluar si son prioritarios." },
+          { q: "Si los precios aumentan y tu ingreso permanece igual, generalmente ocurre que:", options: ["Aumenta tu poder adquisitivo", "Puedes comprar exactamente lo mismo", "Disminuye tu poder adquisitivo", "Desaparecen los gastos variables"], answer: 2, feedback: "Con el mismo ingreso y precios más altos, la cantidad de bienes y servicios que puedes adquirir suele disminuir." },
+          { q: "Un balance financiero positivo ocurre cuando:", options: ["Los gastos superan los ingresos", "Los ingresos superan los gastos", "No se registra ningún gasto", "Todo el ingreso se usa en deseos"], answer: 1, feedback: "Si los ingresos son mayores que los gastos existe un excedente o superávit que puede destinarse a metas, ahorro o reducción de deudas." }
+        ]
+      },
+      {
+        id: "presupuesto",
+        theme: "budget",
+        number: "Módulo 2",
+        icon: "▤",
+        title: "Presupuesto: organizar antes de gastar",
+        lead: "Distribuye los ingresos entre compromisos, ahorro, necesidades y decisiones personales para anticipar el resultado del mes.",
+        concepts: ["presupuesto", "gasto fijo", "gasto variable", "gasto periódico", "déficit", "superávit", "prioridad"],
+        example: "Si una familia recibe $3.000.000 y sus gastos suman $2.850.000, conserva un excedente de $150.000. Ese excedente no es dinero libre automáticamente: puede fortalecer el ahorro o cubrir gastos futuros.",
+        keyPoints: [
+          "El presupuesto es un plan; el registro de gastos muestra lo que realmente ocurrió.",
+          "Los gastos fijos suelen repetirse, pero deben revisarse porque también pueden cambiar.",
+          "Los gastos periódicos no ocurren todos los meses, aunque deben distribuirse dentro del presupuesto anual.",
+          "Un déficit repetido indica que es necesario reducir gastos, aumentar ingresos o renegociar obligaciones.",
+          "El ahorro debe considerarse una categoría planificada, no solo lo que sobra."
+        ],
+        formula: "Superávit o déficit = ingresos totales − gastos totales",
+        calculator: "budget",
+        resources: [
+          { title: "Desafío Japón: Presupuesto", source: "Banca de las Oportunidades", description: "Material pedagógico dirigido a estudiantes de los últimos años escolares.", url: "https://www.bancadelasoportunidades.gov.co/es/node/775", icon: "PDF" },
+          { title: "Juego Superfinanzas", source: "Superintendencia Financiera", description: "Juego digital para practicar decisiones del sistema financiero.", url: "https://www.superfinanciera.gov.co/publicaciones/10113391/consumidor-financieroinformacion-generaleducacion-al-consumidor-financierosuperfinanzas-10113391/", icon: "▶" }
+        ],
+        workshop: [
+          "Construye un presupuesto mensual con al menos dos ingresos y ocho categorías de gasto.",
+          "Clasifica cada gasto como fijo, variable, periódico o imprevisto.",
+          "Calcula el porcentaje que representa cada categoría respecto al ingreso total.",
+          "Propón tres ajustes si el presupuesto presenta déficit, indicando el efecto de cada decisión.",
+          "Explica por qué un gasto anual debe incluirse aunque no ocurra durante el mes analizado."
+        ],
+        quiz: [
+          { q: "¿Qué caracteriza principalmente a un presupuesto?", options: ["Solo registra gastos pasados", "Planifica ingresos y gastos de un periodo", "Elimina todos los gastos variables", "Garantiza que nunca habrá imprevistos"], answer: 1, feedback: "Un presupuesto es una planificación previa. Después debe compararse con lo que realmente ocurrió." },
+          { q: "La matrícula anual de un curso es un ejemplo de:", options: ["Gasto periódico", "Ingreso variable", "Ahorro automático", "Superávit"], answer: 0, feedback: "No ocurre cada mes, pero debe anticiparse y distribuirse en la planificación anual." },
+          { q: "Si los ingresos son $1.200.000 y los gastos $1.350.000, el resultado es:", options: ["Superávit de $150.000", "Déficit de $150.000", "Balance de cero", "Ahorro de $1.350.000"], answer: 1, feedback: "1.200.000 − 1.350.000 = −150.000. El signo negativo representa déficit." }
+        ]
+      },
+      {
+        id: "ahorro",
+        theme: "saving",
+        number: "Módulo 3",
+        icon: "◒",
+        title: "Ahorro: convertir metas en planes",
+        lead: "Define objetivos, establece aportes periódicos y comprende cómo el tiempo y la constancia ayudan a alcanzar una meta.",
+        concepts: ["meta", "aporte periódico", "fondo de emergencia", "plazo", "interés", "inflación", "disciplina"],
+        example: "Una estudiante quiere reunir $1.500.000. Ya posee $300.000 y puede aportar $100.000 al mes. Sin considerar rendimientos, necesitará 12 meses para completar el valor restante.",
+        keyPoints: [
+          "Una meta útil debe tener valor, fecha y propósito definidos.",
+          "El fondo de emergencia atiende situaciones imprevistas; no reemplaza el ahorro para metas.",
+          "Ahorrar primero reduce la dependencia de lo que accidentalmente quede al final del mes.",
+          "Una rentabilidad nominal no indica por sí sola cuánto aumenta realmente el poder de compra.",
+          "Las entidades vigiladas y los productos formales ofrecen mecanismos de protección que no existen en esquemas informales."
+        ],
+        formula: "Tiempo aproximado = (meta − ahorro inicial) ÷ aporte mensual",
+        calculator: "saving",
+        video: { id: "bD85p4KZngE", title: "Taller del ahorro: una alcancía para alcanzar tus sueños", source: "Banco de la República" },
+        resources: [
+          { title: "Desafío Suiza: Ahorro", source: "Banca de las Oportunidades", description: "Material para formular metas y reconocer formas de ahorro.", url: "https://www.bancadelasoportunidades.gov.co/es/node/775", icon: "PDF" },
+          { title: "Costos y remuneración del dinero", source: "Superintendencia Financiera", description: "Consulta tasas de ahorro, CDT, crédito y otros servicios.", url: "https://www.superfinanciera.gov.co/publicaciones/61346/simulador-y-tarifas-de-servicios-financieros-61346/", icon: "%" }
+        ],
+        workshop: [
+          "Escribe una meta financiera de corto plazo con valor y fecha definidos.",
+          "Calcula cuánto deberías ahorrar cada mes para alcanzar esa meta sin rendimientos.",
+          "Propón un fondo de emergencia y explica qué situaciones sí justificarían utilizarlo.",
+          "Compara guardar dinero sin rendimiento frente a una opción formal hipotética que remunera el ahorro.",
+          "Identifica dos gastos que podrías ajustar sin afectar necesidades esenciales."
+        ],
+        quiz: [
+          { q: "¿Cuál meta está mejor formulada?", options: ["Ahorrar más algún día", "Comprar algo costoso", "Reunir $600.000 en seis meses para un curso", "Evitar todos los gastos"], answer: 2, feedback: "Incluye propósito, valor y plazo, lo que permite calcular un aporte periódico." },
+          { q: "El fondo de emergencia se utiliza principalmente para:", options: ["Compras impulsivas", "Gastos inesperados importantes", "Apostar por una ganancia rápida", "Reemplazar todo el presupuesto"], answer: 1, feedback: "Su finalidad es reducir el impacto de eventos inesperados y evitar endeudarse de inmediato." },
+          { q: "Si faltan $900.000 para una meta y puedes ahorrar $150.000 al mes, necesitarás aproximadamente:", options: ["3 meses", "6 meses", "9 meses", "15 meses"], answer: 1, feedback: "900.000 ÷ 150.000 = 6 meses, sin considerar rendimientos ni cambios en el aporte." }
+        ]
+      },
+      {
+        id: "credito",
+        theme: "credit",
+        number: "Módulo 4",
+        icon: "≋",
+        title: "Crédito: utilizar hoy recursos futuros",
+        lead: "Analiza el costo de una deuda, compara tasas y plazos, y verifica si las cuotas son compatibles con la capacidad de pago.",
+        concepts: ["capital", "tasa", "cuota", "plazo", "interés", "costo total", "capacidad de pago", "mora"],
+        example: "Dos créditos pueden financiar el mismo valor. El que tiene la cuota mensual más baja puede terminar costando más si extiende demasiado el plazo.",
+        keyPoints: [
+          "El crédito no aumenta el ingreso: adelanta recursos que deberán pagarse con ingresos futuros.",
+          "La cuota incluye capital e intereses y puede incorporar seguros, comisiones u otros costos.",
+          "Las tasas deben expresarse en una periodicidad comparable.",
+          "Una obligación compatible con el presupuesto puede volverse riesgosa si el ingreso disminuye.",
+          "Ninguna entidad confiable debería exigir pagos anticipados informales para desembolsar un supuesto crédito."
+        ],
+        formula: "Costo aproximado del crédito = total pagado − capital recibido",
+        calculator: "credit",
+        video: { id: "gKN4e2LUuZ4", title: "Las tasas de interés", source: "Banco de la República" },
+        resources: [
+          { title: "Conversor de tasas de interés", source: "Superintendencia Financiera", description: "Convierte tasas efectivas y nominales para compararlas correctamente.", url: "https://www.superfinanciera.gov.co/publicaciones/61554/consumidor-financieroinformacion-generalsimulador-de-conversion-de-tasas-de-interes-61554/", icon: "%" },
+          { title: "Costos de productos financieros", source: "Superintendencia Financiera", description: "Accede al comparador de tarifas y a consultas de tasas.", url: "https://www.superfinanciera.gov.co/publicaciones/61346/simulador-y-tarifas-de-servicios-financieros-61346/", icon: "$" },
+          { title: "Desafío Las Vegas: Endeudamiento", source: "Banca de las Oportunidades", description: "Cartilla para comprender capacidad de pago y señales de deuda problemática.", url: "https://www.bancadelasoportunidades.gov.co/es/node/775", icon: "PDF" }
+        ],
+        workshop: [
+          "Explica con tus palabras la diferencia entre capital, interés, cuota y plazo.",
+          "Compara dos créditos hipotéticos con el mismo monto y diferentes tasas y plazos.",
+          "Calcula qué porcentaje del ingreso mensual ocuparía una cuota determinada.",
+          "Identifica tres costos que podrían existir además de los intereses.",
+          "Analiza por qué una cuota baja no demuestra que un crédito sea barato."
+        ],
+        quiz: [
+          { q: "¿Qué información permite comparar mejor dos créditos?", options: ["Solo el valor de la primera cuota", "Tasa, plazo, cuota y costo total", "El color de la tarjeta", "La rapidez de la publicidad"], answer: 1, feedback: "La decisión exige revisar conjuntamente tasa, plazo, cuota, costos adicionales y total pagado." },
+          { q: "Al extender el plazo de una deuda, normalmente:", options: ["La cuota puede bajar, pero el costo total puede subir", "Desaparecen los intereses", "El capital se convierte en ahorro", "La deuda deja de afectar el presupuesto"], answer: 0, feedback: "Pagar durante más periodos suele reducir la cuota, pero puede aumentar los intereses acumulados." },
+          { q: "Una oferta exige pagar por adelantado un seguro a una cuenta personal para desembolsar el préstamo. La mejor decisión es:", options: ["Pagar rápidamente", "Enviar también la clave", "Detenerse y verificar por canales oficiales", "Solicitar un monto mayor"], answer: 2, feedback: "Los pagos anticipados informales son una señal frecuente de falsos prestamistas." }
+        ]
+      },
+      {
+        id: "inversion",
+        theme: "investment",
+        number: "Módulo 5",
+        icon: "↗",
+        title: "Inversión: riesgo, tiempo y objetivos",
+        lead: "Diferencia ahorro e inversión, reconoce la relación entre riesgo y rentabilidad, y comprende la importancia de diversificar.",
+        concepts: ["rentabilidad", "riesgo", "liquidez", "plazo", "diversificación", "renta fija", "renta variable", "inflación"],
+        example: "Una inversión con mayor rentabilidad esperada también puede presentar fluctuaciones o pérdidas. La decisión depende del objetivo, el plazo y la capacidad para asumir riesgo.",
+        keyPoints: [
+          "Ahorrar prioriza disponibilidad y protección de una meta; invertir busca crecimiento aceptando incertidumbre.",
+          "Rentabilidad pasada no garantiza resultados futuros.",
+          "Diversificar reduce la dependencia de una sola inversión, pero no elimina todos los riesgos.",
+          "El horizonte temporal ayuda a determinar cuánto riesgo puede tolerarse.",
+          "Antes de invertir se debe verificar que la entidad y el asesor estén autorizados."
+        ],
+        formula: "Valor futuro hipotético = aportes + crecimiento acumulado",
+        calculator: "investment",
+        resources: [
+          { title: "Educación al inversionista", source: "AMV Colombia", description: "Videos y cartillas sobre acciones, bonos, fondos y derechos del inversionista.", url: "https://amvcolombia.org.co/educacion-financiera-2/", icon: "AMV" },
+          { title: "Contenidos educativos", source: "AMV Colombia", description: "Materiales organizados por conceptos y productos del mercado de valores.", url: "https://amvcolombia.org.co/educacion-financiera-2/contenidos-educativos/", icon: "▣" },
+          { title: "Mercado de valores", source: "Superintendencia Financiera", description: "Información oficial y cartillas sobre el mercado colombiano.", url: "https://www.superfinanciera.gov.co/publicaciones/10114921/mercado-de-valores/", icon: "SFC" }
+        ],
+        workshop: [
+          "Explica la diferencia entre ahorrar e invertir mediante una meta de corto y otra de largo plazo.",
+          "Relaciona riesgo, rentabilidad esperada, liquidez y horizonte temporal.",
+          "Diseña un ejemplo sencillo de diversificación sin mencionar productos específicos como recomendación.",
+          "Analiza la frase: ‘rentabilidad garantizada, alta y sin riesgo’. Identifica las señales de alerta.",
+          "Explica por qué una simulación de crecimiento no permite conocer el resultado futuro real."
+        ],
+        quiz: [
+          { q: "¿Qué afirmación es correcta?", options: ["Toda inversión garantiza ganancias", "Mayor rentabilidad esperada puede implicar mayor riesgo", "Diversificar elimina cualquier pérdida", "El plazo no influye en una decisión"], answer: 1, feedback: "Riesgo y rentabilidad esperada suelen relacionarse. Ningún resultado futuro está garantizado por una simulación." },
+          { q: "Diversificar significa:", options: ["Invertir todo en una sola alternativa", "Distribuir recursos entre distintas alternativas", "Ocultar una pérdida", "Solicitar crédito para cualquier inversión"], answer: 1, feedback: "Distribuir reduce la dependencia de un solo activo o fuente de riesgo, aunque no elimina la posibilidad de pérdidas." },
+          { q: "Antes de entregar dinero para invertir, es fundamental:", options: ["Confiar en comentarios anónimos", "Verificar entidad, asesor, riesgos y condiciones", "Aceptar presión para decidir", "Ignorar documentos y costos"], answer: 1, feedback: "La verificación oficial y la comprensión de riesgos y condiciones son pasos básicos de protección." }
+        ]
+      },
+      {
+        id: "seguridad",
+        theme: "security",
+        number: "Módulo 6",
+        icon: "⚠",
+        title: "Seguridad: verificar antes de actuar",
+        lead: "Reconoce señales de fraude, protege datos y contraseñas, y utiliza canales oficiales antes de pagar, invertir o solicitar crédito.",
+        concepts: ["phishing", "smishing", "vishing", "suplantación", "código de verificación", "falso prestamista", "pirámide", "canal oficial"],
+        example: "Un mensaje afirma que tu cuenta será bloqueada y exige ingresar de inmediato a un enlace. La urgencia, el enlace inesperado y la solicitud de datos son señales de riesgo.",
+        keyPoints: [
+          "No compartas claves, códigos de verificación ni datos completos de tarjetas.",
+          "La urgencia y la amenaza son técnicas frecuentes de ingeniería social.",
+          "Escribe directamente la dirección oficial o usa la aplicación conocida; no dependas del enlace recibido.",
+          "Verifica que una entidad esté vigilada o autorizada antes de entregar dinero.",
+          "Guarda evidencias y reporta el caso a la entidad y a la autoridad competente."
+        ],
+        formula: "Pausa + verifica + confirma = menor riesgo",
+        securityChallenge: true,
+        resources: [
+          { title: "Protégete de los fraudes", source: "Superintendencia Financiera", description: "Modalidades de engaño, señales de alerta y medidas de protección.", url: "https://www.superfinanciera.gov.co/publicaciones/10115590/protegete-de-los-fraudes/", icon: "!" },
+          { title: "Falsos prestamistas", source: "Superintendencia Financiera", description: "Cómo operan, cómo identificarlos y cómo denunciar.", url: "https://www.superfinanciera.gov.co/publicaciones/10115243/falsos-prestamistas/", icon: "⚠" },
+          { title: "Pirámides y captación ilegal", source: "Superintendencia Financiera", description: "Características de los esquemas ilegales y pruebas de conocimiento.", url: "https://www.superfinanciera.gov.co/publicaciones/10115308/piramides-y-captacion-ilegal/", icon: "△" }
+        ],
+        workshop: [
+          "Identifica cinco señales de alerta en mensajes o llamadas financieras fraudulentas.",
+          "Redacta un protocolo de tres pasos para verificar una solicitud de pago.",
+          "Explica por qué nunca debes compartir un código de verificación recibido por SMS.",
+          "Analiza una oferta de inversión con rentabilidad alta, inmediata y garantizada.",
+          "Consulta en una fuente oficial cómo reportar un falso prestamista y registra la ruta sin compartir datos personales."
+        ],
+        quiz: [
+          { q: "Recibes un mensaje inesperado con un enlace para evitar el bloqueo de tu cuenta. ¿Qué debes hacer?", options: ["Abrirlo inmediatamente", "Responder con la clave", "Ingresar por el canal oficial y verificar", "Reenviarlo a todos tus contactos"], answer: 2, feedback: "Debes evitar el enlace inesperado y verificar directamente desde la aplicación, sitio o número oficial." },
+          { q: "Una señal típica de falso prestamista es:", options: ["Informar claramente sus condiciones", "Exigir un pago previo para desembolsar", "Permitir leer el contrato", "Aparecer en el registro oficial"], answer: 1, feedback: "Los pagos anticipados a cuentas personales o desconocidas son una señal frecuente de fraude." },
+          { q: "¿Cuál dato no debes compartir por llamada o chat?", options: ["El nombre de la entidad que conoces", "Un código de verificación de un solo uso", "Una pregunta general sobre horarios", "El enlace público de la entidad"], answer: 1, feedback: "Los códigos de un solo uso autorizan operaciones o accesos. Ningún asesor debería solicitarlos." }
+        ]
+      }
+    ];
+
+    const securityScenarios = [
+      { title: "Cuenta bloqueada", text: "Un SMS inesperado afirma que tu cuenta será bloqueada en cinco minutos y solicita ingresar a un enlace.", answer: "fraude", feedback: "La urgencia y el enlace inesperado son señales típicas de smishing. Ingresa directamente al canal oficial." },
+      { title: "Compra verificada", text: "Abres la aplicación oficial, verificas el nombre del comercio y confirmas el valor antes de autorizar el pago.", answer: "confiable", feedback: "Usar el canal oficial y verificar los datos reduce el riesgo antes de autorizar." },
+      { title: "Crédito inmediato", text: "Una empresa desconocida ofrece un préstamo sin requisitos, pero pide consignar primero un seguro de desembolso.", answer: "fraude", feedback: "El pago anticipado y la imposibilidad de verificar la entidad son señales asociadas con falsos prestamistas." },
+      { title: "Llamada del banco", text: "Una persona conoce tu nombre y pide el código que acaba de llegar a tu celular para cancelar una compra.", answer: "fraude", feedback: "Conocer algunos datos no demuestra autenticidad. Los códigos de verificación no deben compartirse." }
+    ];
+
+    const extraResources = [
+      { category: "dinero", type: "Visualizador", title: "Visor IPC", source: "DANE", description: "Explora la variación de precios por ciudad, periodo y división de gasto.", url: "https://sitios.dane.gov.co/ipc/visorIPC/" },
+      { category: "dinero", type: "Datos", title: "Graficador interactivo", source: "Banco de la República", description: "Construye gráficas con series económicas oficiales.", url: "https://suameca.banrep.gov.co/graficador-interactivo/" },
+      { category: "crédito", type: "Power BI", title: "Tasas y desembolsos por modalidad de crédito", source: "Superintendencia Financiera", description: "Tablero dinámico de tasas y desembolsos reportados por modalidad de crédito.", url: "https://www.superfinanciera.gov.co/powerbi/reportes/536/483/" },
+      { category: "crédito", type: "Comparador", title: "Comparador de tarifas", source: "Superintendencia Financiera", description: "Compara costos de productos y servicios financieros.", url: "https://www.superfinanciera.gov.co/ComparadorTarifas/home" },
+      { category: "crédito", type: "Simulador", title: "Conversor de tasas", source: "Superintendencia Financiera", description: "Convierte una tasa efectiva anual en mensual o diaria.", url: "https://www.superfinanciera.gov.co/InformacionMercadoValores/reporteConversionTasas/index.xhtml" },
+      { category: "ahorro", type: "Datos", title: "Tasas de ahorro y CDT", source: "Superintendencia Financiera", description: "Consulta tasas efectivas anuales reportadas por entidades vigiladas.", url: "https://www.superfinanciera.gov.co/Superfinanciera-Tasas/faces/generic/passiveInterestRates.xhtml" },
+      { category: "presupuesto", type: "Juego", title: "Superfinanzas", source: "Superintendencia Financiera", description: "Juego digital para aprender presupuesto, ahorro, consumo e inversión.", url: "https://www.superfinanciera.gov.co/publicaciones/10113391/consumidor-financieroinformacion-generaleducacion-al-consumidor-financierosuperfinanzas-10113391/" },
+      { category: "inversión", type: "Biblioteca", title: "Educación al inversionista", source: "AMV Colombia", description: "Cartillas y videos sobre bonos, acciones, fondos y protección al inversionista.", url: "https://amvcolombia.org.co/educacion-financiera-2/" },
+      { category: "seguridad", type: "Micrositio", title: "Protégete de los fraudes", source: "Superintendencia Financiera", description: "Señales de alerta, modalidades y recomendaciones de protección.", url: "https://www.superfinanciera.gov.co/publicaciones/10115590/protegete-de-los-fraudes/" },
+      { category: "seguridad", type: "Micrositio", title: "Falsos prestamistas", source: "Superintendencia Financiera", description: "Cómo reconocer ofertas de crédito fraudulentas y pagos anticipados.", url: "https://www.superfinanciera.gov.co/publicaciones/10115243/falsos-prestamistas/" },
+      { category: "transversal", type: "Experiencia", title: "Exhibición Monetaria Interactiva — Medellín", source: "Banco de la República", description: "Visita educativa gratuita para estudiantes de últimos grados de secundaria.", url: "https://www.banrep.gov.co/es/educa/emi-medellin-planea-su-visita" },
+      { category: "transversal", type: "Portal", title: "Banrep Educa", source: "Banco de la República", description: "Módulos, juegos, talleres, infografías, cartillas y videos de educación económica.", url: "https://www.banrep.gov.co/es/banrep-educa" },
+      { category: "transversal", type: "Cartillas", title: "Desafíos para jóvenes", source: "Banca de las Oportunidades", description: "Materiales sobre presupuesto, ahorro, endeudamiento, seguros y protección.", url: "https://www.bancadelasoportunidades.gov.co/es/node/775" }
+    ];
+
+    const labDefinitions = {
+      budget: {
+        title: "Mapa de tu presupuesto",
+        description: "Distribuye ingresos y observa qué proporción ocupa cada categoría.",
+        fields: [
+          ["income", "Ingreso mensual", 2200000], ["housing", "Vivienda y servicios", 700000],
+          ["food", "Alimentación", 420000], ["transport", "Transporte", 220000],
+          ["education", "Educación", 180000], ["debt", "Deudas", 180000],
+          ["leisure", "Entretenimiento", 130000], ["other", "Otros gastos", 90000]
+        ]
+      },
+      saving: {
+        title: "Ruta hacia una meta",
+        description: "Proyecta el avance mes a mes mediante aportes constantes.",
+        fields: [["target", "Valor de la meta", 2400000], ["initial", "Ahorro inicial", 300000], ["monthly", "Aporte mensual", 150000], ["rate", "Rendimiento anual hipotético (%)", 0]]
+      },
+      credit: {
+        title: "Costo real del crédito",
+        description: "Visualiza la reducción del saldo y la diferencia entre capital e intereses.",
+        fields: [["principal", "Valor solicitado", 3000000], ["annualRate", "Tasa efectiva anual (%)", 24], ["months", "Número de cuotas", 18], ["income", "Ingreso mensual", 1800000]]
+      },
+      investment: {
+        title: "Crecimiento y tiempo",
+        description: "Compara los aportes realizados con un escenario hipotético de crecimiento.",
+        fields: [["initial", "Capital inicial", 500000], ["monthly", "Aporte mensual", 100000], ["annualReturn", "Rentabilidad anual hipotética (%)", 7], ["years", "Plazo en años", 8]]
+      },
+      inflation: {
+        title: "Poder adquisitivo",
+        description: "Observa cuánto podría comprar en el futuro una cantidad equivalente al dinero de hoy.",
+        fields: [["amount", "Valor actual", 1000000], ["inflation", "Inflación anual hipotética (%)", 5], ["years", "Plazo en años", 10]]
+      }
+    };
+
+    let activeModuleId = "dinero";
+    let activeStudioTab = "learn";
+    let activeLab = "budget";
+    const completedModules = new Set();
+    const securityAnswers = Array(securityScenarios.length).fill("");
+    let lastFocusedElement = null;
+
+    const $ = selector => document.querySelector(selector);
+    const $$ = selector => Array.from(document.querySelectorAll(selector));
+    const formatCOP = value => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(Number.isFinite(value) ? value : 0);
+    const formatNumber = value => new Intl.NumberFormat("es-CO", { maximumFractionDigits: 1 }).format(Number.isFinite(value) ? value : 0);
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+    const escapeHTML = value => String(value).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[char]));
+
+    function showToast(message) {
+      const toast = $("#toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    function renderModuleGrid() {
+      const root = $("#module-grid");
+      root.innerHTML = modules.map((module, index) => `
+        <article class="module-card ${module.id === activeModuleId ? "active" : ""}" data-module-card="${module.id}">
+          <div class="module-top">
+            <span class="module-icon" aria-hidden="true">${escapeHTML(module.icon)}</span>
+            <span class="module-number">${escapeHTML(module.number)}</span>
+          </div>
+          <h3>${escapeHTML(module.title)}</h3>
+          <p>${escapeHTML(module.lead)}</p>
+          <div class="module-progress" aria-label="Progreso del módulo"><span style="width:${completedModules.has(module.id) ? 100 : 0}%"></span></div>
+          <button class="button ${index % 3 === 2 ? "yellow" : "secondary"} small" type="button" data-select-module="${module.id}">${module.id === activeModuleId ? "Módulo activo" : "Explorar módulo"}</button>
+        </article>`).join("");
+    }
+
+    function renderStudio() {
+      const module = modules.find(item => item.id === activeModuleId) || modules[0];
+      const tabs = [
+        ["learn", "Comprende"], ["resources", "Explora"], ["workshop", "Practica"], ["quiz", "Comprueba"]
+      ];
+      $("#module-studio").innerHTML = `
+        <header class="studio-header">
+          <span class="studio-label">${escapeHTML(module.number)}</span>
+          <h3>${escapeHTML(module.title)}</h3>
+          <p>${escapeHTML(module.lead)}</p>
+        </header>
+        <div class="studio-tabs" role="tablist" aria-label="Contenido del módulo">
+          ${tabs.map(([id,label]) => `<button class="studio-tab" type="button" role="tab" aria-selected="${activeStudioTab === id}" data-studio-tab="${id}">${label}</button>`).join("")}
+        </div>
+        <div class="studio-content" id="studio-panel">${studioPanelHTML(module, activeStudioTab)}</div>`;
+      attachStudioEvents(module);
+      renderModuleGrid();
+    }
+
+    function studioPanelHTML(module, tab) {
+      if (tab === "learn") {
+        return `<div class="learn-grid">
+          <div>
+            <article class="content-card white-card"><h4>Conceptos clave</h4><ul class="concept-list">${module.concepts.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul><div class="formula-box">${escapeHTML(module.formula)}</div></article>
+            <article class="content-card" style="margin-top:1rem"><h4>Lo esencial</h4><ul class="key-list">${module.keyPoints.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></article>
+          </div>
+          <div>
+            <article class="example-box"><h4>Situación para analizar</h4><p>${escapeHTML(module.example)}</p></article>
+            <article class="content-card white-card" style="margin-top:1rem"><h4>Pregunta de decisión</h4><p>¿Qué dato adicional necesitarías antes de tomar una decisión responsable en una situación semejante?</p><textarea id="reflection-${module.id}" rows="5" style="width:100%;padding:.75rem;border:1px solid var(--line);border-radius:12px;resize:vertical" aria-label="Escribe tu reflexión"></textarea><button class="button small" type="button" data-reflection-save>Marcar reflexión</button></article>
+          </div>
+        </div>`;
+      }
+      if (tab === "resources") {
+        const videos = [module.video, module.secondVideo].filter(Boolean);
+        return `<div class="video-grid">${videos.map(video => `<article class="video-card"><div class="video-cover"><button class="play-button" type="button" data-video-id="${escapeHTML(video.id)}" data-video-title="${escapeHTML(video.title)}" aria-label="Reproducir ${escapeHTML(video.title)}">▶</button></div><span class="resource-tag">Video · ${escapeHTML(video.source)}</span><h4>${escapeHTML(video.title)}</h4><p>El video se carga únicamente cuando decides reproducirlo.</p><button class="button secondary small" type="button" data-video-id="${escapeHTML(video.id)}" data-video-title="${escapeHTML(video.title)}">Ver video</button></article>`).join("")}</div>
+          <div class="resource-grid" style="margin-top:1rem">${module.resources.map(resource => `<article class="resource-card"><span class="resource-tag">${escapeHTML(resource.source)}</span><h4>${escapeHTML(resource.title)}</h4><p>${escapeHTML(resource.description)}</p><a class="button secondary small" href="${escapeHTML(resource.url)}" target="_blank" rel="noopener noreferrer">Abrir recurso oficial ↗</a></article>`).join("")}</div>`;
+      }
+      if (tab === "workshop") {
+        return `<div class="workshop-grid"><article class="workshop-card"><h4>Taller del módulo</h4><ol class="workshop-list">${module.workshop.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ol><div class="button-row" style="margin-top:auto;padding-top:1rem"><button class="button small" type="button" data-copy-workshop>Copiar taller</button><button class="button secondary small" type="button" data-download-workshop>Descargar .txt</button></div></article><article class="workshop-card"><h4>Cómo trabajar</h4><ol class="workshop-list"><li>Resuelve primero sin consultar la respuesta.</li><li>Escribe los cálculos y la justificación de cada decisión.</li><li>Compara tu resultado con otra persona.</li><li>Identifica qué información faltante podría cambiar la decisión.</li><li>Finaliza con una recomendación concreta.</li></ol></article></div>`;
+      }
+      return quizHTML(module);
+    }
+
+    function quizHTML(module) {
+      return `<form id="active-quiz" data-module-id="${module.id}">
+        <div class="quiz-progress"><strong id="quiz-progress-text">Respondidas: 0 de ${module.quiz.length}</strong><span class="progress-track"><span id="quiz-progress-bar"></span></span></div>
+        ${module.quiz.map((question, qIndex) => `<fieldset class="quiz-question"><legend>${qIndex + 1}. ${escapeHTML(question.q)}</legend>${question.options.map((option, oIndex) => `<label class="option"><input type="radio" name="q-${qIndex}" value="${oIndex}"><span>${escapeHTML(option)}</span></label>`).join("")}<p class="feedback" id="quiz-feedback-${qIndex}" aria-live="polite"></p></fieldset>`).join("")}
+        <div class="button-row"><button class="button small" type="submit">Comprobar</button><button class="button secondary small" type="button" data-reset-quiz>Reiniciar</button></div><div class="quiz-result" id="active-quiz-result" role="status" aria-live="polite">Responde las preguntas para completar el módulo.</div></form>`;
+    }
+
+    function attachStudioEvents(module) {
+      $$("[data-studio-tab]").forEach(button => button.addEventListener("click", () => { activeStudioTab = button.dataset.studioTab; renderStudio(); }));
+      $$("[data-video-id]").forEach(button => button.addEventListener("click", () => openVideo(button.dataset.videoId, button.dataset.videoTitle)));
+      $("[data-reflection-save]")?.addEventListener("click", () => {
+        const value = $(`#reflection-${module.id}`).value.trim();
+        if (!value) return showToast("Escribe primero una reflexión breve.");
+        showToast("Reflexión marcada durante esta visita.");
+      });
+      $("[data-copy-workshop]")?.addEventListener("click", () => copyText(workshopText(module)));
+      $("[data-download-workshop]")?.addEventListener("click", () => downloadText(`${module.id}-taller.txt`, workshopText(module)));
+      const quiz = $("#active-quiz");
+      if (quiz) {
+        quiz.addEventListener("change", updateQuizProgress);
+        quiz.addEventListener("submit", event => checkQuiz(event, module));
+        $("[data-reset-quiz]").addEventListener("click", () => { quiz.reset(); renderStudio(); });
+      }
+    }
+
+    function updateQuizProgress() {
+      const module = modules.find(item => item.id === activeModuleId);
+      const answered = module.quiz.filter((_, index) => $(`input[name="q-${index}"]:checked`)).length;
+      $("#quiz-progress-text").textContent = `Respondidas: ${answered} de ${module.quiz.length}`;
+      $("#quiz-progress-bar").style.width = `${answered / module.quiz.length * 100}%`;
+    }
+
+    function checkQuiz(event, module) {
+      event.preventDefault();
+      let score = 0;
+      module.quiz.forEach((question, index) => {
+        const chosen = $(`input[name="q-${index}"]:checked`);
+        const feedback = $(`#quiz-feedback-${index}`);
+        if (!chosen) { feedback.textContent = "Selecciona una opción."; feedback.className = "feedback review"; return; }
+        const correct = Number(chosen.value) === question.answer;
+        if (correct) score++;
+        feedback.textContent = `${correct ? "Correcto." : "Revisa tu respuesta."} ${question.feedback}`;
+        feedback.className = correct ? "feedback" : "feedback review";
+      });
+      $("#active-quiz-result").textContent = `Resultado: ${score}/${module.quiz.length}. ${score === module.quiz.length ? "Módulo completado." : "Usa la retroalimentación y vuelve a intentarlo."}`;
+      if (score === module.quiz.length) { completedModules.add(module.id); renderModuleGrid(); showToast("¡Módulo completado!"); }
+    }
+
+    function workshopText(module) {
+      return `${module.title}\n\nPropósito: ${module.lead}\n\n${module.workshop.map((item,index) => `${index+1}. ${item}`).join("\n\n")}\n\nReflexión final: ¿Qué decisión concreta aplicarías en tu vida y por qué?\n`;
+    }
+
+    async function copyText(text) {
+      try { await navigator.clipboard.writeText(text); showToast("Taller copiado al portapapeles."); }
+      catch { const area = document.createElement("textarea"); area.value = text; document.body.appendChild(area); area.select(); document.execCommand("copy"); area.remove(); showToast("Taller copiado al portapapeles."); }
+    }
+
+    function downloadText(filename, text) {
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a"); anchor.href = url; anchor.download = filename; document.body.appendChild(anchor); anchor.click(); anchor.remove(); URL.revokeObjectURL(url); showToast("Taller descargado.");
+    }
+
+    function openVideo(id, title) {
+      lastFocusedElement = document.activeElement;
+      $("#video-modal-title").textContent = title;
+      $("#video-modal-body").innerHTML = `<div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?rel=0" title="${escapeHTML(title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><p>Contenido externo alojado en YouTube. La conexión se realiza al abrir este reproductor.</p>`;
+      $("#video-modal").hidden = false;
+      document.body.classList.add("modal-open");
+      $("#modal-close").focus();
+    }
+
+    function closeVideo() {
+      $("#video-modal").hidden = true;
+      $("#video-modal-body").innerHTML = "";
+      document.body.classList.remove("modal-open");
+      lastFocusedElement?.focus();
+    }
+
+    function renderLab(labId = activeLab) {
+      activeLab = labId;
+      $$("[data-lab]").forEach(button => button.setAttribute("aria-selected", String(button.dataset.lab === activeLab)));
+      const definition = labDefinitions[activeLab];
+      $("#lab-content").innerHTML = `<div class="lab-panel"><div class="lab-controls"><span class="studio-label">Simulador local</span><h3>${definition.title}</h3><p>${definition.description}</p><div class="form-grid">${definition.fields.map(([id,label,value]) => `<div class="field"><label for="lab-${activeLab}-${id}">${label}</label><input id="lab-${activeLab}-${id}" data-lab-field="${id}" type="number" step="any" value="${value}"></div>`).join("")}</div><div class="lab-actions"><button class="button" id="lab-calculate" type="button">Actualizar gráfica</button><button class="button secondary" id="lab-reset" type="button">Restablecer</button></div><div class="lab-note" id="lab-note">Los resultados son aproximaciones educativas y no sustituyen información contractual ni asesoría profesional.</div></div><div class="lab-visual"><div class="metric-grid" id="lab-metrics"></div><div class="chart-card"><div class="chart-header"><div><h4 id="chart-title">Visualización</h4><p id="chart-subtitle">La gráfica se actualiza con tus datos.</p></div></div><svg class="chart-svg" id="lab-chart" viewBox="0 0 720 360" role="img" aria-labelledby="chart-title chart-description"></svg><p class="sr-only" id="chart-description"></p><div class="chart-legend" id="chart-legend"></div></div></div></div>`;
+      $("#lab-calculate").addEventListener("click", calculateLab);
+      $("#lab-reset").addEventListener("click", () => renderLab(activeLab));
+      $$('[data-lab-field]').forEach(input => input.addEventListener("keydown", event => { if (event.key === "Enter") calculateLab(); }));
+      calculateLab();
+    }
+
+    function getLabValues() {
+      return Object.fromEntries($$("[data-lab-field]").map(input => [input.dataset.labField, Number(input.value)]));
+    }
+
+    function validLabValues(values) {
+      if (!Object.values(values).every(Number.isFinite)) return false;
+      if (activeLab === 'investment') return values.initial >= 0 && values.monthly >= 0 && values.years > 0 && values.annualReturn > -100;
+      return Object.values(values).every(value => value >= 0);
+    }
+
+    function calculateLab() {
+      const values = getLabValues();
+      if (!validLabValues(values)) { $("#lab-note").textContent = "Revisa los valores. Deben ser números iguales o mayores que cero."; return; }
+      if (activeLab === "budget") calculateBudget(values);
+      if (activeLab === "saving") calculateSaving(values);
+      if (activeLab === "credit") calculateCredit(values);
+      if (activeLab === "investment") calculateInvestment(values);
+      if (activeLab === "inflation") calculateInflation(values);
+    }
+
+    function metricHTML(items) { $("#lab-metrics").innerHTML = items.map(([label,value]) => `<div class="metric"><span>${escapeHTML(label)}</span><strong>${escapeHTML(value)}</strong></div>`).join(""); }
+
+    function calculateBudget(v) {
+      const categories = [
+        ["Vivienda", v.housing, "var(--green-dark)"], ["Alimentación", v.food, "var(--green)"], ["Transporte", v.transport, "var(--cyan)"], ["Educación", v.education, "var(--yellow)"], ["Deudas", v.debt, "var(--gray)"], ["Entretenimiento", v.leisure, "var(--cyan-light)"], ["Otros", v.other, "var(--green-light)"]
+      ];
+      const expenses = categories.reduce((sum,item) => sum + item[1],0);
+      const balance = v.income - expenses;
+      const savingsRate = v.income > 0 ? balance / v.income * 100 : 0;
+      metricHTML([["Ingresos", formatCOP(v.income)], ["Gastos", formatCOP(expenses)], [balance >= 0 ? "Disponible" : "Déficit", formatCOP(Math.abs(balance))]]);
+      renderDonut(categories, expenses, "Distribución de gastos", `Los gastos suman ${formatCOP(expenses)} y representan ${v.income ? formatNumber(expenses/v.income*100) : 0}% del ingreso.`);
+      $("#lab-note").textContent = balance >= 0 ? `Tu balance es positivo. El excedente equivale aproximadamente al ${formatNumber(savingsRate)}% del ingreso.` : "Tus gastos superan los ingresos. Revisa primero categorías variables y nuevas obligaciones.";
+    }
+
+    function calculateSaving(v) {
+      if (v.target <= 0 || v.monthly <= 0) { $("#lab-note").textContent = "La meta y el aporte mensual deben ser mayores que cero."; return; }
+      const monthlyRate = Math.pow(1 + v.rate / 100, 1/12) - 1;
+      let balance = v.initial;
+      const points = [{x:0,y:balance}];
+      let month = 0;
+      while (balance < v.target && month < 600) { month++; balance = balance * (1 + monthlyRate) + v.monthly; points.push({x:month,y:balance}); }
+      metricHTML([["Tiempo", month >= 600 ? "> 50 años" : `${month} meses`], ["Aporte propio", formatCOP(v.initial + v.monthly * month)], ["Total estimado", formatCOP(balance)]]);
+      renderLineChart([{name:"Ahorro acumulado",color:"var(--green)",points},{name:"Meta",color:"var(--yellow)",points:[{x:0,y:v.target},{x:Math.max(month,1),y:v.target}]}], "Avance hacia la meta", `La meta de ${formatCOP(v.target)} se alcanzaría aproximadamente en ${month} meses.`);
+      $("#lab-note").textContent = v.rate > 0 ? "El rendimiento es hipotético y constante. En productos reales puede variar y deben considerarse costos e inflación." : "La proyección no considera rendimientos. Muestra el efecto de la constancia y el tiempo.";
+    }
+
+    function calculateCredit(v) {
+      if (v.principal <= 0 || v.months <= 0) { $("#lab-note").textContent = "El valor solicitado y el número de cuotas deben ser mayores que cero."; return; }
+      const months = Math.max(1, Math.round(v.months));
+      const monthlyRate = Math.pow(1 + v.annualRate/100, 1/12) - 1;
+      const payment = monthlyRate === 0 ? v.principal / months : v.principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months));
+      let balance = v.principal;
+      let totalInterest = 0;
+      const points = [{x:0,y:balance}];
+      for (let month=1; month<=months; month++) { const interest = balance * monthlyRate; const principalPaid = Math.min(payment - interest, balance); totalInterest += interest; balance = Math.max(0,balance-principalPaid); points.push({x:month,y:balance}); }
+      const total = payment * months;
+      const burden = v.income > 0 ? payment/v.income*100 : 0;
+      metricHTML([["Cuota estimada", formatCOP(payment)], ["Intereses", formatCOP(totalInterest)], ["Total pagado", formatCOP(total)]]);
+      renderLineChart([{name:"Saldo pendiente",color:"var(--green-dark)",points}], "Reducción del saldo", `El saldo disminuye desde ${formatCOP(v.principal)} hasta cero durante ${months} cuotas.`);
+      $("#lab-note").innerHTML = `La cuota representa aproximadamente <strong>${formatNumber(burden)}%</strong> del ingreso informado. Los valores reales pueden incluir seguros, comisiones e impuestos. <a href="https://www.superfinanciera.gov.co/powerbi/reportes/536/483/" target="_blank" rel="noopener noreferrer">Contrasta con el tablero oficial de tasas y desembolsos ↗</a>`;
+    }
+
+    function calculateInvestment(v) {
+      if (v.years <= 0) { $("#lab-note").textContent = "El plazo debe ser mayor que cero."; return; }
+      const months = Math.round(v.years * 12);
+      const monthlyRate = Math.pow(1 + v.annualReturn/100, 1/12) - 1;
+      let balance = v.initial;
+      const valuePoints = [{x:0,y:balance}], contributionPoints = [{x:0,y:v.initial}];
+      for (let month=1; month<=months; month++) { balance = balance * (1 + monthlyRate) + v.monthly; valuePoints.push({x:month,y:balance}); contributionPoints.push({x:month,y:v.initial+v.monthly*month}); }
+      const contributions = v.initial + v.monthly*months;
+      const growth = balance-contributions;
+      metricHTML([["Aportes", formatCOP(contributions)], ["Valor hipotético", formatCOP(balance)], [growth >= 0 ? "Crecimiento" : "Pérdida", formatCOP(Math.abs(growth))]]);
+      renderLineChart([{name:"Valor hipotético",color:"var(--green)",points:valuePoints},{name:"Aportes",color:"var(--cyan)",points:contributionPoints}], "Tiempo y crecimiento", `Comparación entre ${formatCOP(contributions)} aportados y un valor hipotético de ${formatCOP(balance)}.`);
+      $("#lab-note").textContent = "Esta simulación supone una rentabilidad constante. No predice resultados, no incluye costos y no constituye una recomendación de inversión.";
+    }
+
+    function calculateInflation(v) {
+      if (v.amount <= 0 || v.years <= 0) { $("#lab-note").textContent = "El valor actual y el plazo deben ser mayores que cero."; return; }
+      const points = [];
+      for (let year=0; year<=Math.round(v.years); year++) points.push({x:year,y:v.amount/Math.pow(1+v.inflation/100,year)});
+      const final = points.at(-1).y;
+      const loss = v.amount-final;
+      metricHTML([["Valor inicial", formatCOP(v.amount)], ["Poder de compra final", formatCOP(final)], ["Pérdida equivalente", formatCOP(loss)]]);
+      renderLineChart([{name:"Poder adquisitivo",color:"var(--green-dark)",points}], "Erosión del poder de compra", `Con una inflación hipotética de ${formatNumber(v.inflation)}%, el poder de compra equivalente disminuye a ${formatCOP(final)}.`);
+      $("#lab-note").textContent = "La inflación real cambia a través del tiempo. Consulta el Visor IPC del DANE para analizar datos oficiales.";
+    }
+
+    function renderDonut(categories, total, title, description) {
+      $("#chart-title").textContent = title; $("#chart-subtitle").textContent = "Participación de cada categoría"; $("#chart-description").textContent = description;
+      const svg = $("#lab-chart");
+      const safeTotal = total || 1;
+      let offset = 0;
+      const radius = 105, circumference = 2*Math.PI*radius;
+      const colors = ["#005f35","#009c50","#3bc4e5","#fcef05","#b1a7a5","#e0f6fb","#dff4e8"];
+      const circles = categories.map((item,index) => { const fraction = item[1]/safeTotal; const dash = fraction*circumference; const circle = `<circle cx="240" cy="180" r="${radius}" fill="none" stroke="${colors[index%colors.length]}" stroke-width="40" stroke-dasharray="${dash} ${circumference-dash}" stroke-dashoffset="${-offset}" transform="rotate(-90 240 180)"><title>${escapeHTML(item[0])}: ${formatCOP(item[1])}</title></circle>`; offset += dash; return circle; }).join("");
+      svg.innerHTML = `<rect width="720" height="360" rx="20" fill="#ffffff"/><g>${circles}<circle cx="240" cy="180" r="75" fill="#ffffff"/><text x="240" y="174" text-anchor="middle" fill="#5c6862" font-size="14">Gastos totales</text><text x="240" y="201" text-anchor="middle" fill="#252a28" font-size="22" font-weight="800">${escapeHTML(formatCOP(total))}</text></g><g>${categories.map((item,index)=>`<rect x="430" y="${70+index*34}" width="13" height="13" rx="3" fill="${colors[index%colors.length]}"/><text x="452" y="${81+index*34}" fill="#252a28" font-size="13">${escapeHTML(item[0])}</text><text x="675" y="${81+index*34}" text-anchor="end" fill="#5c6862" font-size="13">${safeTotal ? formatNumber(item[1]/safeTotal*100) : 0}%</text>`).join("")}</g>`;
+      $("#chart-legend").innerHTML = "";
+    }
+
+    function renderLineChart(series, title, description) {
+      $("#chart-title").textContent = title; $("#chart-subtitle").textContent = "Proyección generada en el navegador"; $("#chart-description").textContent = description;
+      const svg = $("#lab-chart");
+      const all = series.flatMap(item => item.points);
+      const maxX = Math.max(...all.map(p=>p.x),1), maxY = Math.max(...all.map(p=>p.y),1), minY = Math.min(...all.map(p=>p.y),0);
+      const left=80,right=690,top=30,bottom=315,width=right-left,height=bottom-top;
+      const x = value => left + value/maxX*width;
+      const y = value => bottom - (value-minY)/(maxY-minY || 1)*height;
+      const grids = Array.from({length:5},(_,i)=>{ const value=minY+(maxY-minY)*i/4; const yy=y(value); return `<line x1="${left}" y1="${yy}" x2="${right}" y2="${yy}" stroke="#d6e3dc" stroke-dasharray="4 5"/><text x="${left-10}" y="${yy+4}" text-anchor="end" fill="#5c6862" font-size="11">${compact(value)}</text>`; }).join("");
+      const xTicks = Array.from({length:6},(_,i)=>{ const value=maxX*i/5; const xx=x(value); return `<line x1="${xx}" y1="${bottom}" x2="${xx}" y2="${bottom+5}" stroke="#b1a7a5"/><text x="${xx}" y="${bottom+22}" text-anchor="middle" fill="#5c6862" font-size="11">${Math.round(value)}</text>`; }).join("");
+      const lines = series.map(item => { const sampled = samplePoints(item.points,90); const d=sampled.map((p,i)=>`${i?'L':'M'} ${x(p.x).toFixed(2)} ${y(p.y).toFixed(2)}`).join(' '); const colorMap={"var(--green)":"#009c50","var(--green-dark)":"#005f35","var(--cyan)":"#3bc4e5","var(--yellow)":"#fcef05"}; const color=colorMap[item.color]||"#009c50"; return `<path d="${d}" fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${x(item.points.at(-1).x)}" cy="${y(item.points.at(-1).y)}" r="6" fill="${color}" stroke="#ffffff" stroke-width="3"><title>${escapeHTML(item.name)}: ${formatCOP(item.points.at(-1).y)}</title></circle>`; }).join("");
+      svg.innerHTML = `<rect width="720" height="360" rx="20" fill="#ffffff"/>${grids}<line x1="${left}" y1="${bottom}" x2="${right}" y2="${bottom}" stroke="#b1a7a5"/>${xTicks}${lines}`;
+      const colorClasses=["","cyan","yellow","gray"];
+      $("#chart-legend").innerHTML = series.map((item,index)=>`<span class="legend-item"><span class="legend-dot ${colorClasses[index]||''}"></span>${escapeHTML(item.name)}</span>`).join("");
+    }
+
+    function samplePoints(points, max) { if (points.length<=max) return points; const step=(points.length-1)/(max-1); return Array.from({length:max},(_,i)=>points[Math.round(i*step)]); }
+    function compact(value) { const abs=Math.abs(value); if(abs>=1e9)return `${formatNumber(value/1e9)}B`; if(abs>=1e6)return `${formatNumber(value/1e6)}M`; if(abs>=1e3)return `${formatNumber(value/1e3)}K`; return formatNumber(value); }
+
+    function renderSecurity() {
+      $("#scenario-list").innerHTML = securityScenarios.map((scenario,index)=>`<article class="scenario"><h4>${index+1}. ${escapeHTML(scenario.title)}</h4><p>${escapeHTML(scenario.text)}</p><div class="scenario-options">${[["confiable","Confiable"],["verificar","Verificar"],["fraude","Posible fraude"]].map(([value,label])=>`<button class="scenario-option ${securityAnswers[index]===value?'selected':''}" type="button" data-scenario="${index}" data-answer="${value}">${label}</button>`).join("")}</div><div class="scenario-feedback" id="scenario-feedback-${index}" aria-live="polite"></div></article>`).join("");
+      $$('[data-scenario]').forEach(button=>button.addEventListener('click',()=>{ const index=Number(button.dataset.scenario); securityAnswers[index]=button.dataset.answer; renderSecurity(); updateSecurityScore(); }));
+      securityAnswers.forEach((answer,index)=>{ if(!answer)return; const scenario=securityScenarios[index]; const box=$(`#scenario-feedback-${index}`); const correct=answer===scenario.answer; box.textContent=`${correct?'Buena decisión.':'Detente y revisa.'} ${scenario.feedback}`; box.className=correct?'scenario-feedback':'scenario-feedback review'; });
+    }
+
+    function updateSecurityScore() {
+      const answered=securityAnswers.filter(Boolean).length;
+      const correct=securityAnswers.reduce((sum,answer,index)=>sum+(answer===securityScenarios[index].answer?1:0),0);
+      const score=answered ? Math.round(correct/securityScenarios.length*100) : 0;
+      $("#security-gauge").style.setProperty('--score',score);
+      $("#security-score").textContent=`${score}%`;
+      $("#security-message").textContent = answered < securityScenarios.length ? `Has analizado ${answered} de ${securityScenarios.length} casos.` : score===100 ? 'Reconociste todas las señales. Verifica siempre por canales oficiales.' : 'Revisa los casos marcados. La urgencia, los enlaces y los pagos anticipados requieren cautela.';
+    }
+
+    function buildResourceList() {
+      const moduleResources = modules.flatMap(module => module.resources.map(resource => ({ category: module.id === 'inversion' ? 'inversión' : module.id === 'credito' ? 'crédito' : module.id, type: 'Recurso', title: resource.title, source: resource.source, description: resource.description, url: resource.url })));
+      const videoResources = modules.flatMap(module => [module.video,module.secondVideo].filter(Boolean).map(video=>({category:module.id==='inversion'?'inversión':module.id==='credito'?'crédito':module.id,type:'Video',title:video.title,source:video.source,description:'Video educativo disponible en la colección del módulo.',videoId:video.id})));
+      return dedupeResources([...extraResources,...moduleResources,...videoResources]);
+    }
+
+    function dedupeResources(items) { const seen=new Set(); return items.filter(item=>{ const key=`${item.title}|${item.source}`.toLowerCase(); if(seen.has(key))return false; seen.add(key); return true; }); }
+    const allResources=buildResourceList();
+    let resourceFilter='todos';
+
+    function renderResourceFilters() {
+      const categories=['todos','dinero','presupuesto','ahorro','crédito','inversión','seguridad','transversal'];
+      $("#resource-filters").innerHTML=categories.map(category=>`<button class="filter-button ${resourceFilter===category?'active':''}" type="button" data-resource-filter="${category}">${category[0].toUpperCase()+category.slice(1)}</button>`).join('');
+      $$('[data-resource-filter]').forEach(button=>button.addEventListener('click',()=>{resourceFilter=button.dataset.resourceFilter;renderResourceFilters();renderResources();}));
+    }
+
+    function renderResources() {
+      const query=$("#resource-search").value.trim().toLowerCase();
+      const filtered=allResources.filter(item=>(resourceFilter==='todos'||item.category===resourceFilter)&&(`${item.title} ${item.source} ${item.description} ${item.type} ${item.category}`.toLowerCase().includes(query)));
+      $("#resource-explorer").innerHTML=filtered.length?filtered.map(item=>`<article class="explorer-card"><div class="resource-meta"><span class="chip">${escapeHTML(item.category)}</span><span class="chip cyan">${escapeHTML(item.type)}</span><span class="chip yellow">${escapeHTML(item.source)}</span></div><h3>${escapeHTML(item.title)}</h3><p>${escapeHTML(item.description)}</p>${item.videoId?`<button class="button secondary small" type="button" data-library-video="${escapeHTML(item.videoId)}" data-library-title="${escapeHTML(item.title)}">Ver video</button>`:`<a class="button secondary small" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">Abrir recurso ↗</a>`}</article>`).join(''):'<div class="empty-state"><strong>No se encontraron recursos.</strong><p>Prueba otra palabra o selecciona “Todos”.</p></div>';
+      $$('[data-library-video]').forEach(button=>button.addEventListener('click',()=>openVideo(button.dataset.libraryVideo,button.dataset.libraryTitle)));
+    }
+
+    function selectModule(id, shouldScroll=true) {
+      activeModuleId=id; activeStudioTab='learn'; renderStudio();
+      if(shouldScroll) $("#aula").scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    function initNavigation() {
+      const toggle=$("#menu-toggle"), nav=$("#main-nav");
+      toggle.addEventListener('click',()=>{ const open=!nav.classList.contains('open'); nav.classList.toggle('open',open); toggle.setAttribute('aria-expanded',String(open)); document.body.classList.toggle('menu-open',open); });
+      nav.addEventListener('click',event=>{ if(event.target.matches('a')){nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');document.body.classList.remove('menu-open');} });
+      const sections=$$('main section[id], .hero[id]');
+      const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{ if(entry.isIntersecting){ $$('.main-nav a').forEach(link=>link.toggleAttribute('aria-current',link.getAttribute('href')===`#${entry.target.id}`)); }}),{rootMargin:'-35% 0px -55%',threshold:0});
+      sections.forEach(section=>observer.observe(section));
+    }
+
+    function initReveal() {
+      if(matchMedia('(prefers-reduced-motion: reduce)').matches){$$('.reveal').forEach(el=>el.classList.add('visible'));return;}
+      const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}}),{threshold:.12});
+      $$('.reveal').forEach(el=>observer.observe(el));
+    }
+
+    document.addEventListener('click',event=>{
+      const select=event.target.closest('[data-select-module]'); if(select) selectModule(select.dataset.selectModule);
+      const openLab=event.target.closest('[data-open-lab]'); if(openLab){renderLab(openLab.dataset.openLab);$("#laboratorio").scrollIntoView({behavior:'smooth'});}
+    });
+
+    $$('.lab-tab').forEach(button=>button.addEventListener('click',()=>renderLab(button.dataset.lab)));
+    $("#resource-search").addEventListener('input',renderResources);
+    $("#reset-security").addEventListener('click',()=>{securityAnswers.fill('');renderSecurity();updateSecurityScore();});
+    $("#modal-close").addEventListener('click',closeVideo);
+    $("#video-modal").addEventListener('click',event=>{if(event.target===$("#video-modal"))closeVideo();});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$("#video-modal").hidden)closeVideo();});
+    $("#back-top").addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+    addEventListener('scroll',()=>$("#back-top").classList.toggle('visible',scrollY>850),{passive:true});
+
+    renderModuleGrid();
+    renderStudio();
+    renderLab();
+    renderSecurity();
+    updateSecurityScore();
+    renderResourceFilters();
+    renderResources();
+    initNavigation();
+    initReveal();
+  </script>
+</body>
+</html>
